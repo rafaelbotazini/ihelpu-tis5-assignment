@@ -1,18 +1,18 @@
-# Nome do projeto
+# iHelpU
 
-Escreva um ou dois  parágrafo resumindo o objetivo do seu projeto.
+Aplicação para criação de grupos de conversas sobre tópicos acadêmicos.
 
 ## Alunos integrantes da equipe
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
+* Matheus Santos Rosa Carneiro
+* Raissa Carolina Vilela da Silva
+* Rafael Soares Botazini
+* Vitor Augusto Alves de Jesus
 
 ## Professores responsáveis
 
-* Nome completo do professor 1
-* Nome completo do professor 2
+* Hugo Bastos de Paula
+* Pedro Alves de Oliveira
 
 ## Instruções de utilização
 
