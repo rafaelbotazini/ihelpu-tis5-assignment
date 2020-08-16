@@ -4,14 +4,14 @@ Aplicação para criação de grupos de conversas sobre tópicos acadêmicos.
 
 ## Alunos integrantes da equipe
 
-* Matheus Santos Rosa Carneiro
-* Raissa Carolina Vilela da Silva
-* Rafael Soares Botazini
-* Vitor Augusto Alves de Jesus
+* Matheus Santos Rosa Carneiro - [mcarneirobug](https://github.com/mcarneirobug)
+* Raissa Carolina Vilela da Silva - [raissavilela](https://github.com/raissavilela)
+* Rafael Soares Botazini - [rafaelbotazini](https://github.com/rafaelbotazini)
+* Vitor Augusto Alves de Jesus - [ovitorj](https://github.com/ovitorj)
 
 ## Professores responsáveis
 
-* Hugo Bastos de Paula
+* Hugo Bastos de Paula - [hugodepaula](https://github.com/hugodepaula)
 * Pedro Alves de Oliveira
 
 ## Instruções de utilização
