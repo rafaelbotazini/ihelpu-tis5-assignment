@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Delete, Put, Body, Request, Response } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Put,
+  Body,
+  Request,
+  Response,
+} from '@nestjs/common';
 
 import { RoomsService } from './room.service';
 import { Room } from './interface/room.interface';
@@ -7,9 +16,9 @@ import { Room } from './interface/room.interface';
 export class RoomController {
   constructor(private readonly roomsService: RoomsService) {}
 
-  @Get() 
+  @Get()
   async index(): Promise<Room[]> {
-      return await this.roomsService.findAll();
+    return await this.roomsService.findAll();
   }
 
   @Post()
@@ -22,18 +31,15 @@ export class RoomController {
   async show(@Request() req, @Response() res): Promise<Room> {
     const id = req.params.id;
 
-    if(!id) {
+    if (!id) {
       return res.json({ error: 'ID Room not found' });
     }
 
     const room = await this.roomsService.findById(id);
-    if(!room) {
+    if (!room) {
       return res.json({ error: `A sala com o id: ${id} não existe` });
     }
 
     return room;
   }
-  
-
-
 }

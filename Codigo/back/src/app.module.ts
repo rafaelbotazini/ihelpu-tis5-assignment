@@ -5,8 +5,9 @@ import { AppService } from './app.service';
 import { RoomsModule } from './models/rooms/room.module';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/chat-api'),
-   RoomsModule
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost/chat-api'),
+    RoomsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
