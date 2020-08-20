@@ -12,7 +12,7 @@ Aplicação para criação de grupos de conversas sobre tópicos acadêmicos.
 ## Professores responsáveis
 
 * Hugo Bastos de Paula - [hugodepaula](https://github.com/hugodepaula)
-* Pedro Alves de Oliveira
+* Pedro Alves de Oliveira - [Pedro-aol](https://github.com/Pedro-aol)
 
 ## Instruções de utilização
 
