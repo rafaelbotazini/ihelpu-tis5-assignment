@@ -27,11 +27,25 @@
 ```bash
 # Clone este repositório
 $ git clone <https://github.com/icei-pucminas/plf-es-2020-2-tiv-6702100-ihelpu.git>
+$ cd Codigo/back/
 
 # Instale as dependências
 $ yarn install
 
 # O servidor inciará na porta:3000 - acesse <http://localhost:3000>
+```
+
+### :zap: Rodando o Front end 
+```bash
+# Clone este repositório
+$ git clone <https://github.com/icei-pucminas/plf-es-2020-2-tiv-6702100-ihelpu.git>
+$ cd Codigo/front/
+
+# Instale as dependências
+$ yarn install
+
+# Iniciar aplicação
+$ yarn start
 ```
 
 ### 🛠 Tecnologias
