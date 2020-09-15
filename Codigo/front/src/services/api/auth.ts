@@ -10,7 +10,7 @@ interface AuthResponse {
 export const signIn = (
   credentials: Credentials,
 ): Promise<AxiosResponse<AuthResponse>> =>
-  apiRequest.post('/auth/signin', credentials);
+  apiRequest.post('/auth/login', credentials);
 
 export const signUp = (
   user: SignUpForm,

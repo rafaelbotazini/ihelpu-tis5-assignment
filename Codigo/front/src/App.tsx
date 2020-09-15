@@ -6,6 +6,7 @@ import GlobalStyle from './styles/global';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import PrivateRoute from './pages/PrivateRoute';
+import HomePage from './pages/HomePage';
 
 const App: React.FC = () => {
   return (
@@ -24,7 +25,7 @@ const App: React.FC = () => {
           <PrivateRoute path="/app">
             <Switch>
               <Route exact path="/app">
-                Home page
+                <HomePage />
               </Route>
               <Route path="/app/*">404 Not found</Route>
             </Switch>
