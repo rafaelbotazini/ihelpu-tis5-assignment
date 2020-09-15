@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiArrowLeft, FiMail, FiUser, FiLock } from 'react-icons/fi';
 import { FaUniversity, FaUserCircle } from 'react-icons/fa';
+
+import { SignUpForm } from '../../models/forms/SignUpForm';
+import { login } from '../../services/auth';
+import { signUp } from '../../services/api/auth';
 
 import logoImg from '../../assets/users.svg';
 
@@ -8,46 +12,104 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Content } from './styles';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
-const SignUp: React.FC = () => (
-  <Container>
-    <Content>
-      <img src={logoImg} alt="iHelpU" />
-      <h4>iHelpU</h4>
+const SignUp: React.FC = () => {
+  const history = useHistory<{ pathname: string }>();
+  const location = useLocation<{ from: { pathname: string } }>();
 
-      <form>
-        <h1>Faça seu Cadastro</h1>
+  const [user, setUser] = useState<SignUpForm>({
+    name: '',
+    username: '',
+    email: '',
+    password: '',
+    university: '',
+  });
 
-        <Input name="name" type="text" icon={FaUserCircle} placeholder="Nome" />
-        <Input
-          name="username"
-          type="text"
-          icon={FiUser}
-          placeholder="Username"
-        />
-        <Input
-          name="university"
-          type="text"
-          icon={FaUniversity}
-          placeholder="Universidade"
-        />
-        <Input name="email" type="email" icon={FiMail} placeholder="E-mail" />
-        <Input
-          name="password"
-          type="password"
-          icon={FiLock}
-          placeholder="Senha"
-        />
+  const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    const { name, value } = e.currentTarget;
+    setUser((c) => ({ ...c, [name]: value }));
+  };
 
-        <Button type="submit">Cadastrar</Button>
-      </form>
+  const handleSubmit = (e: React.FormEvent): void => {
+    e.preventDefault();
 
-      <a href="login">
-        <FiArrowLeft />
-        Voltar para logon
-      </a>
-    </Content>
-  </Container>
-);
+    console.log('credentials', user);
+
+    signUp(user)
+      .then((res) => {
+        login(res.data.token);
+        const { from } = location.state || { from: { pathname: '/' } };
+        history.push(from);
+      })
+      .catch(() => alert('Email ou senha incorretos.'));
+  };
+
+  return (
+    <Container>
+      <Content>
+        <img src={logoImg} alt="iHelpU" />
+        <h4>iHelpU</h4>
+
+        <form onSubmit={handleSubmit}>
+          <h1>Faça seu Cadastro</h1>
+
+          <Input
+            required
+            name="name"
+            value={user.name}
+            onChange={handleChange}
+            type="text"
+            icon={FaUserCircle}
+            placeholder="Nome"
+          />
+          <Input
+            required
+            name="username"
+            value={user.username}
+            onChange={handleChange}
+            type="text"
+            icon={FiUser}
+            placeholder="Username"
+          />
+          <Input
+            required
+            name="university"
+            value={user.university}
+            onChange={handleChange}
+            type="text"
+            icon={FaUniversity}
+            placeholder="Universidade"
+          />
+          <Input
+            required
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            type="email"
+            icon={FiMail}
+            placeholder="E-mail"
+          />
+          <Input
+            required
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+            type="password"
+            icon={FiLock}
+            placeholder="Senha"
+          />
+
+          <Button type="submit">Cadastrar</Button>
+        </form>
+
+        <Link to="signin">
+          <FiArrowLeft />
+          Voltar para logon
+        </Link>
+      </Content>
+    </Container>
+  );
+};
 
 export default SignUp;
