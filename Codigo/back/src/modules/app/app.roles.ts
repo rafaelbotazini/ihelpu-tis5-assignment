@@ -14,7 +14,7 @@ export const roles: RolesBuilder = new RolesBuilder();
 // To mutate the return body of mongoose queries try editing the ProfileService
 roles
   .grant(AppRoles.DEFAULT)
-  .readOwn("profile")
+  .readAny("profile")
   .updateOwn("profile")
   .deleteOwn("profile")
   .grant(AppRoles.ADMIN)

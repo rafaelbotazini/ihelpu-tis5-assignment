@@ -8,7 +8,8 @@ export const Profile = new Schema({
   username: { type: String, required: true },
   email: { type: String, required: true },
   name: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false /* hide password field when fetching */ },
+  university: { type: String, required: true },
   avatar: { type: String, required: true },
   roles: [{ type: String }],
   date: {
@@ -45,6 +46,10 @@ export interface IProfile extends Document {
    * Gravatar
    */
   readonly avatar: string;
+  /**
+   * Univeristy name
+   */
+  readonly university: string;
   /**
    * Roles
    */
