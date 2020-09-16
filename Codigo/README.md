@@ -55,7 +55,7 @@ $ yarn install
 $ yarn start:dev
 ```
 
-O servidor inciará na porta 9000. Acesse <http://localhost:9000>.
+O servidor inciará na porta 9000. Acesse <http://localhost:9000/api/docs> para ver a documentação da API.
 
 #### :zap: Rodando o Front end
 
