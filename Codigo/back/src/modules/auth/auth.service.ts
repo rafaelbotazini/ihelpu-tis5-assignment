@@ -89,7 +89,7 @@ export class AuthService {
    */
   async validateUser(payload: LoginPayload): Promise<IProfile> {
     const user = await this.profileService.getByUsernameAndPass(
-      payload.username,
+      payload.email,
       payload.password,
     );
     if (!user) {
