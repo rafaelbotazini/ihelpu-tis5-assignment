@@ -74,7 +74,7 @@ export class ProfileService {
    * @returns {Promise<IProfile>} created profile data
    */
   async create(payload: RegisterPayload): Promise<IProfile> {
-    const user = await this.getByUsername(payload.username);
+    const user = await this.getByUsername(payload.email);
     if (user) {
       throw new NotAcceptableException(
         "The account with the provided username currently exists. Please choose another one.",
@@ -83,6 +83,7 @@ export class ProfileService {
     // this will auto assign the admin role to each created user
     const createdProfile = new this.profileModel({
       ...payload,
+      username: payload.email,
       password: crypto.createHmac("sha256", payload.password).digest("hex"),
       avatar: gravatar.url(payload.email, {
         protocol: "http",
@@ -90,7 +91,7 @@ export class ProfileService {
         r: "pg",
         d: "404",
       }),
-      roles: AppRoles.ADMIN,
+      roles: AppRoles.DEFAULT,
     });
 
     return createdProfile.save();

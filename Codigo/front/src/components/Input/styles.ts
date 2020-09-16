@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  
   background: #232129;
   border-radius: 10px;
   border: 2px solid #232129;
@@ -20,7 +19,7 @@ export const Container = styled.div`
     flex: 1;
     background: transparent;
     border: 0;
-    color: #F4EDE8;
+    color: #f4ede8;
 
     &::placeholder {
       color: #666360;
@@ -29,10 +28,9 @@ export const Container = styled.div`
     & + input {
       margin-top: 8px;
     }
-  } 
+  }
 
   svg {
     margin-right: 16px;
   }
-
 `;
