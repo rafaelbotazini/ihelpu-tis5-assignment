@@ -6,7 +6,5 @@
   - Seção 3
   - Código do front-end e do back-end
 
-Atas de reunião semanais
-
 ## Instruções
 * Os documentos para a avaliação dos professores orientadores, estão presentes na pasta "PDF".
