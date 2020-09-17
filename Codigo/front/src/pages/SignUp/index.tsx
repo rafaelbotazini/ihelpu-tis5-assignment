@@ -42,7 +42,7 @@ const SignUp: React.FC = () => {
         const { from } = location.state || { from: { pathname: '/' } };
         history.push(from);
       })
-      .catch(() => alert('Email ou senha incorretos.'));
+      .catch(() => alert('Ocorreu algum erro, tente novamente.'));
   };
 
   return (
@@ -95,6 +95,7 @@ const SignUp: React.FC = () => {
             name="password"
             value={user.password}
             onChange={handleChange}
+            minLength={8}
             type="password"
             icon={FiLock}
             placeholder="Senha"
