@@ -3,8 +3,11 @@
 <h1 align="center">
     <a href="#">🔗 React & Node.js </a>
 </h1>
-
 <img src="https://img.shields.io/static/v1?label=ChatRoom&message=iHelpU&color=7159c1&style=for-the-badge&logo=ghost"/>
+
+![Node Version][node-image]
+![Yarn Version][yarn-image]
+
 
 # 📝 Tabela de conteúdos
 
@@ -86,3 +89,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 <h4 align="center"> 
 	🚧  Projeto 🚀 Em construção...  🚧
 </h4>
+
+<!-- Markdown link & img dfn's -->
+[node-image]: https://img.shields.io/badge/node.js-12.16.1%2B-informational
+[yarn-image]: https://img.shields.io/badge/yarn-1.22.4%2B-blue
