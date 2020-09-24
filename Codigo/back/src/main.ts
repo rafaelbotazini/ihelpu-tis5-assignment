@@ -44,7 +44,18 @@ export const SWAGGER_API_CURRENT_VERSION = "1.0";
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(SWAGGER_API_ROOT, app, document);
   app.enableCors();
-  app.register(headers);
+
+  app.register(headers, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [`'self'`],
+        styleSrc: [`'self'`, `'unsafe-inline'`],
+        imgSrc: [`'self'`, "data:", "validator.swagger.io"],
+        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+      },
+    },
+  });
+
   // app.register(fastifyRateLimiter, {
   //   max: 100,
   //   timeWindow: '1 minute',
