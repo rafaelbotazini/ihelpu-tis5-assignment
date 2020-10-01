@@ -11,9 +11,10 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { ACGuard, UseRoles } from "nest-access-control";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ProfileService, IGenericMessageBody } from "./profile.service";
+import { ProfileService } from "./profile.service";
 import { PatchProfilePayload } from "./payload/patch.profile.payload";
 import { IProfile } from "./profile.model";
+import { IGenericMessageBody } from "modules/common/interfaces/IGenericMessageBody";
 
 /**
  * Profile Controller

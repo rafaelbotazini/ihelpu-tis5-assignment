@@ -11,16 +11,7 @@ import { IProfile } from "./profile.model";
 import { RegisterPayload } from "modules/auth/payload/register.payload";
 import { AppRoles } from "../app/app.roles";
 import { PatchProfilePayload } from "./payload/patch.profile.payload";
-
-/**
- * Models a typical response for a crud operation
- */
-export interface IGenericMessageBody {
-  /**
-   * Status message to return
-   */
-  message: string;
-}
+import { IGenericMessageBody } from "modules/common/interfaces/IGenericMessageBody";
 
 /**
  * Profile Service
