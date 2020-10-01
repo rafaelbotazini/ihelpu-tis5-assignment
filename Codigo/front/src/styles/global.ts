@@ -23,7 +23,20 @@ export default createGlobalStyle`
     font-weight: 500;
   }
 
+  h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
   button {
     cursor: pointer;
+  }
+
+  a {
+    color: white;
   }
 `;
