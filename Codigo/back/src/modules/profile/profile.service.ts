@@ -45,25 +45,25 @@ export class ProfileService {
   }
 
   /**
-   * Fetches a profile from database by username
-   * @param {string} username
+   * Fetches a profile from database by email
+   * @param {string} email
    * @returns {Promise<IProfile>} queried profile data
    */
-  getByUsername(username: string): Promise<IProfile> {
-    return this.profileModel.findOne({ username }).exec();
+  getByEmail(email: string): Promise<IProfile> {
+    return this.profileModel.findOne({ email }).exec();
   }
 
   /**
-   * Fetches a profile by their username and hashed password
-   * @param {string} username
+   * Fetches a profile by their email and hashed password
+   * @param {string} email
    * @param {string} password
    * @returns {Promise<IProfile>} queried profile data
    */
-  getByUsernameAndPass(username: string, password: string): Promise<IProfile> {
+  getByEmailAndPass(email: string, password: string): Promise<IProfile> {
     return this.profileModel
       .findOne({
-        username,
-        password: crypto.createHmac("sha256", password).digest("hex"),
+        email,
+        password: this.hashPassword(password),
       })
       .exec();
   }
@@ -74,17 +74,16 @@ export class ProfileService {
    * @returns {Promise<IProfile>} created profile data
    */
   async create(payload: RegisterPayload): Promise<IProfile> {
-    const user = await this.getByUsername(payload.email);
+    const user = await this.getByEmail(payload.email);
     if (user) {
       throw new NotAcceptableException(
-        "The account with the provided username currently exists. Please choose another one.",
+        "The account with the provided email currently exists. Please choose another one.",
       );
     }
     // this will auto assign the admin role to each created user
     const createdProfile = new this.profileModel({
       ...payload,
-      username: payload.email,
-      password: crypto.createHmac("sha256", payload.password).digest("hex"),
+      password: this.hashPassword(payload.password),
       avatar: gravatar.url(payload.email, {
         protocol: "http",
         s: "200",
@@ -103,33 +102,40 @@ export class ProfileService {
    * @returns {Promise<IProfile>} mutated profile data
    */
   async edit(payload: PatchProfilePayload): Promise<IProfile> {
-    const { username } = payload;
+    const { email } = payload;
+
     const updatedProfile = await this.profileModel.updateOne(
-      { username },
+      { email },
       payload,
     );
+
     if (updatedProfile.nModified !== 1) {
       throw new BadRequestException(
-        "The profile with that username does not exist in the system. Please try another username.",
+        "The profile with that email does not exist in the system.",
       );
     }
-    return this.getByUsername(username);
+
+    return this.getByEmail(email);
   }
 
   /**
-   * Delete profile given a username
-   * @param {string} username
+   * Delete profile given a email
+   * @param {string} email
    * @returns {Promise<IGenericMessageBody>} whether or not the crud operation was completed
    */
-  delete(username: string): Promise<IGenericMessageBody> {
-    return this.profileModel.deleteOne({ username }).then(profile => {
+  delete(email: string): Promise<IGenericMessageBody> {
+    return this.profileModel.deleteOne({ email }).then((profile) => {
       if (profile.deletedCount === 1) {
-        return { message: `Deleted ${username} from records` };
+        return { message: `Deleted ${email} from records` };
       } else {
         throw new BadRequestException(
-          `Failed to delete a profile by the name of ${username}.`,
+          `Failed to delete a profile by the name of ${email}.`,
         );
       }
     });
+  }
+
+  private hashPassword(password: string): string {
+    return crypto.createHmac("sha256", password).digest("hex");
   }
 }

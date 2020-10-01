@@ -22,6 +22,16 @@ export class RegisterPayload {
   email: string;
 
   /**
+   * Username field
+   */
+  @ApiProperty({
+    required: true,
+  })
+  @IsAlphanumeric()
+  @IsNotEmpty()
+  username: string;
+
+  /**
    * Name field
    */
   @ApiProperty({

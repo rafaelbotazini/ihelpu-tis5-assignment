@@ -32,16 +32,18 @@ export class PatchProfilePayload {
   /**
    * Name field
    */
-  @ApiProperty()
-  @Matches(/^[a-zA-Z ]+$/)
+  @ApiProperty({
+    required: true,
+  })
   @IsNotEmpty()
   name: string;
 
   /**
-   * Password field
+   * University field
    */
-  @ApiProperty()
+  @ApiProperty({
+    required: true,
+  })
   @IsNotEmpty()
-  @MinLength(8)
-  password: string;
+  university: string;
 }
