@@ -6,9 +6,13 @@ import { AppRoles } from "modules/app/app.roles";
  */
 export const Profile = new Schema({
   username: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
-  password: { type: String, required: true, select: false /* hide password field when fetching */ },
+  password: {
+    type: String,
+    required: true,
+    select: false /* hide password field when fetching */,
+  },
   university: { type: String, required: true },
   avatar: { type: String, required: true },
   roles: [{ type: String }],
