@@ -1,7 +1,19 @@
+import jwt from 'jsonwebtoken';
+
 export const TOKEN_KEY = '@iHelpU-Token';
 
-export const isAuthenticated = (): boolean =>
-  localStorage.getItem(TOKEN_KEY) !== null;
+export const isAuthenticated = (): boolean => {
+  const token = getToken();
+
+  if (token) {
+    const data = jwt.decode(token, { json: true });
+    if (data) {
+      const expiration = Number(data['exp']);
+      return Date.now() < expiration * 1000;
+    }
+  }
+  return false;
+};
 
 export const getToken = (): string | null => localStorage.getItem(TOKEN_KEY);
 
