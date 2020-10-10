@@ -6,3 +6,9 @@ export const list = (): Promise<Room[]> =>
 
 export const create = (name: string): Promise<Room> =>
   apiRequest.post('/room', { name }).then(({ data }) => data);
+
+export const get = (id: string): Promise<Room> =>
+  apiRequest.get('/room/' + id).then(({ data }) => data);
+
+export const edit = (room: Room): Promise<void> =>
+  apiRequest.put('/room/' + room._id, room);

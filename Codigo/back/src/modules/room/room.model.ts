@@ -12,7 +12,11 @@ export const Room = new Schema({
     type: Date,
     default: Date.now,
   },
-});
+},
+{
+  id: true,
+}
+);
 
 /**
  * Mongoose Room Document
@@ -22,6 +26,7 @@ export interface IRoom extends Document {
    * UUID
    */
   readonly _id: Schema.Types.ObjectId;
+  readonly id: string;
   /**
    * Admin ID
    */

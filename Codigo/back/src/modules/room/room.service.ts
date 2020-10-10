@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Injectable } from "@nestjs/common";
 import { IRoom } from "./room.model";
 import { CreateRoomPayload } from "./payload/CreateRoomPayload";
+import { EditRoomPayload } from "./payload/EditRoomPayload";
 
 /**
  * Room Service
@@ -33,4 +34,19 @@ export class RoomService {
   async listRooms(): Promise<IRoom[]> {
     return await this.roomModel.find({});
   }
+
+  async editRoom(
+    id: string,
+    payload: EditRoomPayload,
+  ): Promise<void> {
+    await this.roomModel.findByIdAndUpdate(id, payload);
+  }
+
+  async getRoomById(
+    id: string,
+  ): Promise<IRoom> {
+    const room = await this.roomModel.findById(id);
+    return room;
+  }
+
 }

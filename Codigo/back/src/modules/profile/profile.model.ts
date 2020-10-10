@@ -20,7 +20,13 @@ export const Profile = new Schema({
     type: Date,
     default: Date.now,
   },
-});
+},
+{
+  id: true,
+
+}
+
+);
 
 /**
  * Mongoose Profile Document
@@ -30,6 +36,7 @@ export interface IProfile extends Document {
    * UUID
    */
   readonly _id: Schema.Types.ObjectId;
+  readonly id: string;
   /**
    * Username
    */
@@ -62,4 +69,5 @@ export interface IProfile extends Document {
    * Date
    */
   readonly date: Date;
+
 }

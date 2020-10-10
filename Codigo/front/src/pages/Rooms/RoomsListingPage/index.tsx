@@ -29,6 +29,7 @@ const RoomsListingPage: React.FC = () => {
                   alt={'Avatar da sala' + room.name}
                 />
               )}
+              <Link to={'/app/rooms/edit/' + room._id}>Editar Sala</Link>
               {!room.avatar && <FiBookOpen size="18" />} {room.name}
             </h2>
           </div>
