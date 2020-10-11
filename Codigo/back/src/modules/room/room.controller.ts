@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Put,
   Request,
   UseGuards,
 } from "@nestjs/common";
@@ -12,6 +14,8 @@ import { RoomService } from "./room.service";
 import { IRoom } from "./room.model";
 import { CreateRoomPayload } from "./payload/CreateRoomPayload";
 import { IProfile } from "modules/profile/profile.model";
+import { EditRoomPayload } from "./payload/EditRoomPayload";
+import { Schema } from "mongoose";
 
 /**
  * Room Controller
@@ -30,6 +34,16 @@ export class RoomControler {
     return await this.roomService.listRooms();
   }
 
+  @Get(":id")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiResponse({ status: 200, description: "Fetch Rooms Request Received" })
+  @ApiResponse({ status: 400, description: "Fetch Rooms Request Failed" })
+  async getRoom(
+    @Param("id") id: string,
+  ): Promise<IRoom> {
+    return await this.roomService.getRoomById(id);
+  }
+
   @Post()
   @UseGuards(AuthGuard("jwt"))
   @ApiResponse({ status: 201, description: "Create Room Request Received" })
@@ -40,4 +54,19 @@ export class RoomControler {
   ): Promise<IRoom> {
     return await this.roomService.createRoom(payload, req.user._id);
   }
+
+  @Put(":id")
+  @UseGuards(AuthGuard("jwt"))
+  @ApiResponse({ status: 200, description: "Fetch Rooms Request Received" })
+  @ApiResponse({ status: 400, description: "Fetch Rooms Request Failed" })
+  async editRoom(
+    @Param("id") id: string,
+    @Request() req: { user: IProfile },
+    @Body() payload: EditRoomPayload,
+
+  ): Promise<void>{
+      return await this.roomService.editRoom(id, payload);
+  }
+
+
 }

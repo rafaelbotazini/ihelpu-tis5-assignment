@@ -17,7 +17,14 @@ roles
   .readAny("profile")
   .updateOwn("profile")
   .deleteOwn("profile")
+  .readAny("room")
+  .updateOwn("room")
+  .deleteOwn("room")
   .grant(AppRoles.ADMIN)
   .readAny("profiles")
   .updateAny("profiles")
-  .deleteAny("profiles");
+  .deleteAny("profiles")
+  .readAny("room")
+  .updateAny("room")
+  .deleteAny("room");
+
