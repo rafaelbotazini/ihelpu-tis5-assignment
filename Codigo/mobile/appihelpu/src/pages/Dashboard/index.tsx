@@ -3,6 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import Button from '../../components/Button';
 
+import { logout } from '../../services/auth';
+
 import {
   Container,
   Header,
@@ -44,7 +46,8 @@ const Dashboard: React.FC = () => {
       </Button>
       <Button
         onPress={() => {
-          console.log('sair');
+          logout();
+          navigate('SignIn');
         }}
       >
         Logout

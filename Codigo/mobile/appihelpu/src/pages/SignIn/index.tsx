@@ -12,6 +12,10 @@ import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 
+import { Credentials } from '../../models/Credentials';
+import { signIn } from '../../services/api/auth';
+import { login } from '../../services/auth';
+
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
@@ -32,10 +36,10 @@ import {
   CreateAccountButtonText,
 } from './styles';
 
-interface SignInFormData {
-  email: string;
-  password: string;
-}
+// interface SignInFormData {
+//   email: string;
+//   password: string;
+// }
 
 const SignIn: React.FC = () => {
   /**
@@ -46,7 +50,7 @@ const SignIn: React.FC = () => {
   const navigation = useNavigation();
 
   // recuperar os dados que estão sendo passados no form
-  const handleSignIn = useCallback(async (data: SignInFormData) => {
+  const handleSignIn = useCallback(async (data: Credentials) => {
     try {
       formRef.current?.setErrors({});
 
@@ -61,10 +65,9 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
 
-      // await signIn({
-      //   email: data.email,
-      //   password: data.password,
-      // });
+      const res = await signIn(data);
+      await login(res.data.token);
+      navigation.navigate('Dashboard');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);
