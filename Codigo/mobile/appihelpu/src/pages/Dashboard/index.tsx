@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import Button from '../../components/Button';
@@ -15,9 +15,9 @@ import {
 const Dashboard: React.FC = () => {
   const { navigate } = useNavigation();
 
-  // const navigateToProfile = useCallback(() => {
-  //   navigate('Profile')
-  // }, [navigate])
+  const navigateToProfile = useCallback(() => {
+    navigate('Profile');
+  }, [navigate]);
 
   return (
     <Container>
@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
           Bem vindo, {'\n'}
           <UserName>Matheus</UserName>
         </HeaderTitle>
-        <ProfileButton>
+        <ProfileButton onPress={navigateToProfile}>
           <UserAvatar
             source={{
               uri: 'https://api.adorable.io/avatars/72/abott@adorable.png',
@@ -34,7 +34,14 @@ const Dashboard: React.FC = () => {
           />
         </ProfileButton>
       </Header>
-      <Button onPress={() => {}}>Editar dados</Button>
+
+      <Button
+        onPress={() => {
+          navigate('Profile');
+        }}
+      >
+        Editar dados
+      </Button>
       <Button
         onPress={() => {
           console.log('sair');
