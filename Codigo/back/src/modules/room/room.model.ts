@@ -8,7 +8,7 @@ import { IProfile } from 'modules/profile/profile.model';
 export const Room = new DefaultSchema({
   name: { type: String, required: true },
   admin: { type: Schema.Types.ObjectId, ref: 'Profile' },
-  members: { type: Schema.Types.ObjectId, ref: 'Profile' },
+  members: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
   avatar: { type: String },
 });
 

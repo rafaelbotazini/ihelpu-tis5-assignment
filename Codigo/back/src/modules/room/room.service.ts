@@ -49,16 +49,21 @@ export class RoomService {
     return room;
   }
 
-  async join(roomId: string, userId: string): Promise<void> {
+  async join(roomId: string, user: IProfile): Promise<void> {
     const room = await this.getRoomById(roomId);
+
+    await user.populate('groups').execPopulate();
+    await room.populate('admin').execPopulate();
 
     if (!room) {
       throw new NotFoundException(`The room with id  ${roomId} was not found`);
     }
 
-    const user = await this.profileService.get(userId);
+    const isMember = await this.userIsMember(room, user);
 
-    if (this.userIsMember(room, user)) {
+    console.log('isMember', isMember);
+
+    if (isMember) {
       return;
     }
 

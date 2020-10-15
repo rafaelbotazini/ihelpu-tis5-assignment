@@ -14,7 +14,6 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoomService } from './room.service';
 import { IRoom } from './room.model';
 import { CreateRoomPayload } from './payload/CreateRoomPayload';
-import { IProfile } from 'modules/profile/profile.model';
 import { EditRoomPayload } from './payload/EditRoomPayload';
 import GenericRequest from 'common/interfaces/GenericRequest';
 
@@ -48,10 +47,21 @@ export class RoomControler {
   @ApiResponse({ status: 201, description: 'Create Room Request Received' })
   @ApiResponse({ status: 400, description: 'Create Room Request Failed' })
   async createRoom(
-    @Request() req: { user: IProfile },
+    @Request() req: GenericRequest,
     @Body() payload: CreateRoomPayload,
   ): Promise<IRoom> {
     return await this.roomService.createRoom(payload, req.user);
+  }
+
+  @Post(':id/join')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiResponse({ status: 200, description: 'Join Room Request Received' })
+  @ApiResponse({ status: 400, description: 'Join Room Request Failed' })
+  async join(
+    @Param('id') id: string,
+    @Request() req: GenericRequest,
+  ): Promise<void> {
+    await this.roomService.join(id, req.user);
   }
 
   @Put(':id')
