@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import RoomCard from '../../../components/RoomCard';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
 import {
@@ -38,18 +39,7 @@ const SearchRoomPage: React.FC = () => {
         </SearchStatus>
         <ResultsList>
           {!loading &&
-            results.map((room) => (
-              <div key={room._id}>
-                {room.avatar && (
-                  <img
-                    height="16"
-                    src={room.avatar}
-                    alt={'Avatar da sala' + room.name}
-                  />
-                )}
-                {room.name}
-              </div>
-            ))}
+            results.map((room) => <RoomCard key={room._id} room={room} />)}
         </ResultsList>
       </ResultsContainer>
     </Container>

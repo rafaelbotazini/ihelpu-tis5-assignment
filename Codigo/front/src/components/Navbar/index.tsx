@@ -11,7 +11,7 @@ const Navbar: React.FC = ({ children }) => {
     <NavWrapper>
       <Brand onClick={() => history.push('/')}>
         <div>
-          <img src={logo} height="40" />
+          <img src={logo} height="40" alt="iHelpU logo" />
           <span>IHelpU</span>
         </div>
       </Brand>

@@ -8,7 +8,7 @@ import BottomLink from '../BottomLink';
 const Layout: React.FC = ({ children }) => {
   return (
     <Wrapper>
-      <Navbar>hehe</Navbar>
+      <Navbar />
       <ContentWrapper>
         <Sider>
           <BottomMenu>

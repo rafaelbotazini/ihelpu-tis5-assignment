@@ -25,6 +25,7 @@ export const ResultsList = styled.div`
   display: flex;
   flex: 1;
   flex-flow: row wrap;
+  justify-content: center;
 `;
 
 export const SearchInputWrapper = styled.div`
