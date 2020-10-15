@@ -1,6 +1,6 @@
-import { parse } from "dotenv";
-import * as joi from "@hapi/joi";
-import * as fs from "fs";
+import { parse } from 'dotenv';
+import * as joi from '@hapi/joi';
+import * as fs from 'fs';
 
 /**
  * Key-value mapping
@@ -38,10 +38,7 @@ export class ConfigService {
      * A schema to validate envConfig against
      */
     const envVarsSchema: joi.ObjectSchema = joi.object({
-      APP_ENV: joi
-        .string()
-        .valid("dev", "prod")
-        .default("dev"),
+      APP_ENV: joi.string().valid('dev', 'prod').default('dev'),
       APP_URL: joi.string().uri({
         scheme: [/https?/],
       }),

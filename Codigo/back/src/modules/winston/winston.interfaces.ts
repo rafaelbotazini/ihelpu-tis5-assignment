@@ -1,5 +1,6 @@
-import { ModuleMetadata } from "@nestjs/common/interfaces";
-import { LoggerOptions } from "winston";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ModuleMetadata } from '@nestjs/common/interfaces';
+import { LoggerOptions } from 'winston';
 
 /**
  * Logger options
@@ -10,7 +11,7 @@ export type WinstonModuleOptions = LoggerOptions;
  * Asynchronous winston module options
  */
 export interface WinstonModuleAsyncOptions
-  extends Pick<ModuleMetadata, "imports"> {
+  extends Pick<ModuleMetadata, 'imports'> {
   /**
    * Default factory method that returns winston module options
    */
@@ -23,3 +24,5 @@ export interface WinstonModuleAsyncOptions
    */
   inject?: any[];
 }
+
+/* eslint-enable @typescript-eslint/no-explicit-any */

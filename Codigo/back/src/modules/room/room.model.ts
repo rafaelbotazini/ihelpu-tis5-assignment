@@ -1,21 +1,21 @@
-import { Schema, Document } from "mongoose";
-import { AppRoles } from "modules/app/app.roles";
+import { Schema, Document } from 'mongoose';
 
 /**
  * Mongoose Room Schema
  */
-export const Room = new Schema({
-  admin: { type: Schema.Types.ObjectId, required: true },
-  name: { type: String, required: true },
-  avatar: { type: String },
-  date: {
-    type: Date,
-    default: Date.now,
+export const Room = new Schema(
+  {
+    admin: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+    avatar: { type: String },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
   },
-},
-{
-  id: true,
-}
+  {
+    id: true,
+  },
 );
 
 /**

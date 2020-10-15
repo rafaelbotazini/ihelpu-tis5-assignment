@@ -1,34 +1,33 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from "@nestjs/platform-fastify";
-import * as headers from "fastify-helmet";
-import * as fastifyRateLimiter from "fastify-rate-limit";
-import { AppModule } from "./modules/app/app.module";
-import { ValidationPipe } from "@nestjs/common";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+} from '@nestjs/platform-fastify';
+import * as headers from 'fastify-helmet';
+import { AppModule } from './modules/app/app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 /**
  * The url endpoint for open api ui
  * @type {string}
  */
-export const SWAGGER_API_ROOT = "api/docs";
+export const SWAGGER_API_ROOT = 'api/docs';
 /**
  * The name of the api
  * @type {string}
  */
-export const SWAGGER_API_NAME = "API";
+export const SWAGGER_API_NAME = 'API';
 /**
  * A short description of the api
  * @type {string}
  */
-export const SWAGGER_API_DESCRIPTION = "API Description";
+export const SWAGGER_API_DESCRIPTION = 'API Description';
 /**
  * Current version of the api
  * @type {string}
  */
-export const SWAGGER_API_CURRENT_VERSION = "1.0";
+export const SWAGGER_API_CURRENT_VERSION = '1.0';
 
 (async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -50,7 +49,7 @@ export const SWAGGER_API_CURRENT_VERSION = "1.0";
       directives: {
         defaultSrc: [`'self'`],
         styleSrc: [`'self'`, `'unsafe-inline'`],
-        imgSrc: [`'self'`, "data:", "validator.swagger.io"],
+        imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
         scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
       },
     },
@@ -62,5 +61,5 @@ export const SWAGGER_API_CURRENT_VERSION = "1.0";
   // });
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.listen(9000, "0.0.0.0");
+  await app.listen(9000, '0.0.0.0');
 })();
