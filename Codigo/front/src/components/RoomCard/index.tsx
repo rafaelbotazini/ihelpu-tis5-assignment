@@ -1,13 +1,13 @@
 import React from 'react';
 import { Room } from '../../models/Room';
-import Button from '../Button';
 import { Card, RoomAvatar, RoomDetails } from './styles';
 
 type RoomCardProps = {
   room: Room;
+  renderActions?: (room: Room) => React.ReactNode;
 };
 
-const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
+const RoomCard: React.FC<RoomCardProps> = ({ room, renderActions }) => {
   return (
     <Card>
       <RoomAvatar>
@@ -19,7 +19,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
         <p>{room.university || 'PUC Minas'}</p>
         <small>{room.members || 0} membros</small>
       </RoomDetails>
-      <Button>Participar</Button>
+      {renderActions && renderActions(room)}
     </Card>
   );
 };

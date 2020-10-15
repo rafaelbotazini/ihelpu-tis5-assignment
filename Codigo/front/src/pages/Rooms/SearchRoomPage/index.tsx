@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Button from '../../../components/Button';
+import CardList from '../../../components/CardList';
 import RoomCard from '../../../components/RoomCard';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
@@ -9,7 +11,6 @@ import {
   SearchInputWrapper,
   SearchInput,
   SearchStatus,
-  ResultsList,
 } from './styles';
 
 const SearchRoomPage: React.FC = () => {
@@ -37,10 +38,16 @@ const SearchRoomPage: React.FC = () => {
           {!loading && !results.length && 'Nenhum resultado encontrado'}
           {!loading && results.length && 'Resultados encontrados:'}
         </SearchStatus>
-        <ResultsList>
+        <CardList>
           {!loading &&
-            results.map((room) => <RoomCard key={room._id} room={room} />)}
-        </ResultsList>
+            results.map((room) => (
+              <RoomCard
+                key={room._id}
+                room={room}
+                renderActions={() => <Button>Participar</Button>}
+              />
+            ))}
+        </CardList>
       </ResultsContainer>
     </Container>
   );

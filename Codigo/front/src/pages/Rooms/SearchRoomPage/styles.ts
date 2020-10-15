@@ -21,13 +21,6 @@ export const ResultsContainer = styled.div`
   text-align: center;
 `;
 
-export const ResultsList = styled.div`
-  display: flex;
-  flex: 1;
-  flex-flow: row wrap;
-  justify-content: center;
-`;
-
 export const SearchInputWrapper = styled.div`
   width: 100%;
   max-width: 580px;
