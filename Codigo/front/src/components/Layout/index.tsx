@@ -16,13 +16,23 @@ import Navbar from '../Navbar';
 import BottomLink from '../BottomLink';
 import { Room } from '../../models/Room';
 import api from '../../services/api';
+import { useCurrentUser } from '../../contexts/currentUser';
 
 const Layout: React.FC = ({ children }) => {
+  const { user, setUser } = useCurrentUser();
   const [rooms, setRooms] = useState<Room[]>([]);
 
   useEffect(() => {
+    if (!user) {
+      api.profile.getCurrent().then(setUser).catch(console.log);
+    }
     api.profile.getRooms().then(setRooms);
-  }, []);
+  }, [setUser, user]);
+
+  const handleLogout = (): void => {
+    setUser(undefined);
+    logout();
+  };
 
   return (
     <Wrapper>
@@ -56,7 +66,7 @@ const Layout: React.FC = ({ children }) => {
               to="/signin"
               name="Sair"
               icon={FaSignOutAlt}
-              onClick={logout}
+              onClick={handleLogout}
             />
           </BottomMenu>
         </Sider>

@@ -32,7 +32,7 @@ export class ProfileService {
    * @returns {Promise<IProfile>} queried profile data
    */
   get(id: string): Promise<IProfile> {
-    return this.profileModel.findById(id).exec();
+    return this.profileModel.findById(id).populate('groups').exec();
   }
 
   /**

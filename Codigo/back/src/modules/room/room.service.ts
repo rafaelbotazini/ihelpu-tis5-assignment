@@ -64,9 +64,7 @@ export class RoomService {
       throw new NotFoundException(`The room with id  ${roomId} was not found`);
     }
 
-    const isMember = await this.userIsMember(room, user);
-
-    console.log('isMember', isMember);
+    const isMember = this.userIsMember(room, user);
 
     if (isMember) {
       return;

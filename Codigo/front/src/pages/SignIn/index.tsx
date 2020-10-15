@@ -11,6 +11,8 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Content } from './styles';
+import { useCurrentUser } from '../../contexts/currentUser';
+import api from '../../services/api';
 
 type LocationState = {
   from: {
@@ -19,6 +21,7 @@ type LocationState = {
 };
 
 const SignIn: React.FC = () => {
+  const currentUser = useCurrentUser();
   const history = useHistory<{ pathname: string }>();
   const location = useLocation<LocationState>();
 
@@ -38,6 +41,10 @@ const SignIn: React.FC = () => {
     signIn(credentials)
       .then((res) => {
         login(res.data.token);
+      })
+      .then(api.profile.getCurrent)
+      .then(currentUser.setUser)
+      .then(() => {
         const { from } = location.state || { from: { pathname: '/' } };
         history.push(from);
       })
