@@ -1,4 +1,4 @@
-import { Model, Schema } from 'mongoose';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { IRoom } from './room.model';
@@ -47,6 +47,11 @@ export class RoomService {
   async getRoomById(id: string): Promise<IRoom> {
     const room = await this.roomModel.findById(id).populate('admin');
     return room;
+  }
+
+  async getRoomByUser(user: IProfile): Promise<IRoom[]> {
+    await user.populate('groups').execPopulate();
+    return user.groups;
   }
 
   async join(roomId: string, user: IProfile): Promise<void> {

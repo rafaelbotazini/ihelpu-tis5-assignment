@@ -24,6 +24,10 @@ const SearchRoomPage: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleJoin = async (roomId: string): Promise<void> => {
+    await api.rooms.join(roomId);
+  };
+
   return (
     <Container>
       <SearchContainer>
@@ -42,9 +46,13 @@ const SearchRoomPage: React.FC = () => {
           {!loading &&
             results.map((room) => (
               <RoomCard
-                key={room._id}
+                key={room.id}
                 room={room}
-                renderActions={() => <Button>Participar</Button>}
+                renderActions={() => (
+                  <Button onClick={() => handleJoin(room.id)}>
+                    Participar
+                  </Button>
+                )}
               />
             ))}
         </CardList>

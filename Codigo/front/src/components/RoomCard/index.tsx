@@ -16,8 +16,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, renderActions }) => {
       </RoomAvatar>
       <h4 style={{ marginBottom: 12 }}>{room.name}</h4>
       <RoomDetails>
-        <p>{room.university || 'PUC Minas'}</p>
-        <small>{room.members || 0} membros</small>
+        <p>{room.admin && room.admin.university}</p>
+        <small>{(room.members || []).length} membro(s)</small>
       </RoomDetails>
       {renderActions && renderActions(room)}
     </Card>

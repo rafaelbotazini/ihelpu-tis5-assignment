@@ -34,6 +34,14 @@ export class RoomControler {
     return await this.roomService.listRooms();
   }
 
+  @Get('/subscribed')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiResponse({ status: 200, description: 'Fetch Rooms Request Received' })
+  @ApiResponse({ status: 400, description: 'Fetch Rooms Request Failed' })
+  async listRoomsByUser(@Request() req: GenericRequest): Promise<IRoom[]> {
+    return await this.roomService.getRoomByUser(req.user);
+  }
+
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiResponse({ status: 200, description: 'Fetch Rooms Request Received' })

@@ -1,8 +1,9 @@
+import Profile from './Profile';
+
 export interface Room {
-  _id: string;
-  admin: string;
+  id: string;
+  admin?: Profile;
   name: string;
   avatar: string;
-  members?: number;
-  university?: string;
+  members?: string[];
 }
