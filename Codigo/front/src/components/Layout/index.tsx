@@ -1,32 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FaPlus, FaSearch, FaSignOutAlt } from 'react-icons/fa';
-import { logout } from '../../services/auth';
-
-import {
-  Sider,
-  Wrapper,
-  ContentWrapper,
-  Content,
-  BottomMenu,
-  SideMenu,
-  SideMenuItem,
-} from './styles';
-
+import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
 import Navbar from '../Navbar';
 import BottomLink from '../BottomLink';
-import { Room } from '../../models/Room';
-import api from '../../services/api';
+import SideBarMenu from '../SideBarMenu';
 import { useCurrentUser } from '../../contexts/currentUser';
+import api from '../../services/api';
+import { logout } from '../../services/auth';
 
 const Layout: React.FC = ({ children }) => {
   const { user, setUser } = useCurrentUser();
-  const [rooms, setRooms] = useState<Room[]>([]);
 
   useEffect(() => {
     if (!user) {
       api.profile.getCurrent().then(setUser).catch(console.log);
     }
-    api.profile.getRooms().then(setRooms);
   }, [setUser, user]);
 
   const handleLogout = (): void => {
@@ -39,18 +27,7 @@ const Layout: React.FC = ({ children }) => {
       <Navbar />
       <ContentWrapper>
         <Sider>
-          <SideMenu>
-            <SideMenuItem>Meus grupos:</SideMenuItem>
-            {!rooms.length && (
-              <SideMenuItem>Nenhum grupo encontrado</SideMenuItem>
-            )}
-
-            {rooms.map((room) => (
-              <SideMenuItem style={{ margin: '0 20px' }} key={room.id}>
-                {room.name}
-              </SideMenuItem>
-            ))}
-          </SideMenu>
+          <SideBarMenu />
           <BottomMenu>
             <BottomLink
               to="/app/rooms/search"

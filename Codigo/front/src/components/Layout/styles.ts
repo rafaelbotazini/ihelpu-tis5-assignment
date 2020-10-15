@@ -20,18 +20,6 @@ export const Sider = styled.div`
   background-color: ${colors.dark};
 `;
 
-export const SideMenu = styled.div`
-  display: flex;
-  padding: 28px 0 15px;
-  flex-direction: column;
-`;
-
-export const SideMenuItem = styled.div`
-  display: flex;
-  padding: 15px;
-  flex-direction: column;
-`;
-
 export const BottomMenu = styled.div`
   display: flex;
   justify-content: center;

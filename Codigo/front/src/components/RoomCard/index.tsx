@@ -1,6 +1,7 @@
 import React from 'react';
+import RoomAvatar from '../RoomAvatar';
 import { Room } from '../../models/Room';
-import { Card, RoomAvatar, RoomDetails } from './styles';
+import { Card, RoomDetails } from './styles';
 
 type RoomCardProps = {
   room: Room;
@@ -10,10 +11,7 @@ type RoomCardProps = {
 const RoomCard: React.FC<RoomCardProps> = ({ room, renderActions }) => {
   return (
     <Card>
-      <RoomAvatar>
-        {!!room.avatar && <img src={room.avatar} alt={room.name + ' avatar'} />}
-        {!room.avatar && room.name[0]}
-      </RoomAvatar>
+      <RoomAvatar room={room} style={{ marginBottom: 12 }} />
       <h4 style={{ marginBottom: 12 }}>{room.name}</h4>
       <RoomDetails>
         <p>{room.admin && room.admin.university}</p>
