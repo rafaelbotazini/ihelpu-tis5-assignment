@@ -1,31 +1,30 @@
-import { Schema, Document } from "mongoose";
-import { AppRoles } from "modules/app/app.roles";
+import { Schema, Document } from 'mongoose';
+import { AppRoles } from 'modules/app/app.roles';
 
 /**
  * Mongoose Profile Schema
  */
-export const Profile = new Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-  password: {
-    type: String,
-    required: true,
-    select: false /* hide password field when fetching */,
+export const Profile = new Schema(
+  {
+    username: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    password: {
+      type: String,
+      required: true,
+      select: false /* hide password field when fetching */,
+    },
+    university: { type: String, required: true },
+    avatar: { type: String, required: true },
+    roles: [{ type: String }],
+    date: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  university: { type: String, required: true },
-  avatar: { type: String, required: true },
-  roles: [{ type: String }],
-  date: {
-    type: Date,
-    default: Date.now,
+  {
+    id: true,
   },
-},
-{
-  id: true,
-
-}
-
 );
 
 /**
@@ -69,5 +68,4 @@ export interface IProfile extends Document {
    * Date
    */
   readonly date: Date;
-
 }

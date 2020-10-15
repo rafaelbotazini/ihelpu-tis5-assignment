@@ -1,6 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Schema } from "mongoose";
-import { ObjectID } from "typeorm";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class EditRoomPayload {
   @ApiProperty()

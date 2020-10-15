@@ -1,19 +1,20 @@
-import { Injectable, Module } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
-import { expect } from "chai";
-import { WINSTON_MODULE_PROVIDER } from "./winston.constants";
-import { WinstonModule } from "./winston.module";
+import { Injectable, Module } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { expect } from 'chai';
+import { WINSTON_MODULE_PROVIDER } from './winston.constants';
+import { WinstonModule } from './winston.module';
 
-describe("Winston Module", () => {
-  it("boots successfully", async () => {
+describe('Winston Module', () => {
+  it('boots successfully', async () => {
     const rootModule = await Test.createTestingModule({
       imports: [WinstonModule.forRoot({})],
     }).compile();
 
-    expect(rootModule.get(WINSTON_MODULE_PROVIDER)).to.be.an("object");
+    expect(rootModule.get(WINSTON_MODULE_PROVIDER)).to.be.an('object');
   });
 
-  it("boots successfully asynchronously", async () => {
+  it('boots successfully asynchronously', async () => {
+    /* eslint-disable @typescript-eslint/ban-ts-comment */
     @Injectable()
     // @ts-ignore
     class ConfigService {
@@ -26,6 +27,7 @@ describe("Winston Module", () => {
     })
     // @ts-ignore
     class FeatureModule {}
+    /* eslint-enable @typescript-eslint/ban-ts-comment */
 
     const rootModule = await Test.createTestingModule({
       imports: [
@@ -40,6 +42,6 @@ describe("Winston Module", () => {
     const app = rootModule.createNestApplication();
     await app.init();
 
-    expect(rootModule.get(WINSTON_MODULE_PROVIDER)).to.be.an("object");
+    expect(rootModule.get(WINSTON_MODULE_PROVIDER)).to.be.an('object');
   });
 });

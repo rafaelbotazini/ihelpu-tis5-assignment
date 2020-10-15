@@ -1,17 +1,17 @@
-import * as crypto from "crypto";
-import * as gravatar from "gravatar";
-import { Model } from "mongoose";
-import { InjectModel } from "@nestjs/mongoose";
+import * as crypto from 'crypto';
+import * as gravatar from 'gravatar';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import {
   BadRequestException,
   Injectable,
   NotAcceptableException,
-} from "@nestjs/common";
-import { IProfile } from "./profile.model";
-import { RegisterPayload } from "modules/auth/payload/register.payload";
-import { AppRoles } from "../app/app.roles";
-import { PatchProfilePayload } from "./payload/patch.profile.payload";
-import { IGenericMessageBody } from "modules/common/interfaces/IGenericMessageBody";
+} from '@nestjs/common';
+import { IProfile } from './profile.model';
+import { RegisterPayload } from 'modules/auth/payload/register.payload';
+import { AppRoles } from '../app/app.roles';
+import { PatchProfilePayload } from './payload/patch.profile.payload';
+import { IGenericMessageBody } from 'modules/common/interfaces/IGenericMessageBody';
 
 /**
  * Profile Service
@@ -23,7 +23,7 @@ export class ProfileService {
    * @param {Model<IProfile>} profileModel
    */
   constructor(
-    @InjectModel("Profile") private readonly profileModel: Model<IProfile>,
+    @InjectModel('Profile') private readonly profileModel: Model<IProfile>,
   ) {}
 
   /**
@@ -68,7 +68,7 @@ export class ProfileService {
     const user = await this.getByEmail(payload.email);
     if (user) {
       throw new NotAcceptableException(
-        "The account with the provided email currently exists. Please choose another one.",
+        'The account with the provided email currently exists. Please choose another one.',
       );
     }
     // this will auto assign the admin role to each created user
@@ -76,10 +76,10 @@ export class ProfileService {
       ...payload,
       password: this.hashPassword(payload.password),
       avatar: gravatar.url(payload.email, {
-        protocol: "http",
-        s: "200",
-        r: "pg",
-        d: "404",
+        protocol: 'http',
+        s: '200',
+        r: 'pg',
+        d: '404',
       }),
       roles: AppRoles.DEFAULT,
     });
@@ -102,7 +102,7 @@ export class ProfileService {
 
     if (updatedProfile.nModified !== 1) {
       throw new BadRequestException(
-        "The profile with that email does not exist in the system.",
+        'The profile with that email does not exist in the system.',
       );
     }
 
@@ -127,6 +127,6 @@ export class ProfileService {
   }
 
   private hashPassword(password: string): string {
-    return crypto.createHmac("sha256", password).digest("hex");
+    return crypto.createHmac('sha256', password).digest('hex');
   }
 }

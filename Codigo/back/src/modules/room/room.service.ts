@@ -1,16 +1,16 @@
-import { Model, Schema } from "mongoose";
-import { InjectModel } from "@nestjs/mongoose";
-import { Injectable } from "@nestjs/common";
-import { IRoom } from "./room.model";
-import { CreateRoomPayload } from "./payload/CreateRoomPayload";
-import { EditRoomPayload } from "./payload/EditRoomPayload";
+import { Model, Schema } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Injectable } from '@nestjs/common';
+import { IRoom } from './room.model';
+import { CreateRoomPayload } from './payload/CreateRoomPayload';
+import { EditRoomPayload } from './payload/EditRoomPayload';
 
 /**
  * Room Service
  */
 @Injectable()
 export class RoomService {
-  constructor(@InjectModel("Room") private readonly roomModel: Model<IRoom>) {}
+  constructor(@InjectModel('Room') private readonly roomModel: Model<IRoom>) {}
 
   /**
    * Creates a room in the database
@@ -35,18 +35,12 @@ export class RoomService {
     return await this.roomModel.find({});
   }
 
-  async editRoom(
-    id: string,
-    payload: EditRoomPayload,
-  ): Promise<void> {
+  async editRoom(id: string, payload: EditRoomPayload): Promise<void> {
     await this.roomModel.findByIdAndUpdate(id, payload);
   }
 
-  async getRoomById(
-    id: string,
-  ): Promise<IRoom> {
+  async getRoomById(id: string): Promise<IRoom> {
     const room = await this.roomModel.findById(id);
     return room;
   }
-
 }
