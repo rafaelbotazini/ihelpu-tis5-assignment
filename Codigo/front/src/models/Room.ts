@@ -3,4 +3,6 @@ export interface Room {
   admin: string;
   name: string;
   avatar: string;
+  members?: number;
+  university?: string;
 }

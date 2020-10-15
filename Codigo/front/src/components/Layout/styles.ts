@@ -1,40 +1,37 @@
-import { darken } from 'polished';
 import styled from 'styled-components';
+import { colors } from '../../styles/themes';
 
 export const Wrapper = styled.div`
-  display: flex;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
+export const ContentWrapper = styled.div`
+  display: flex;
+  flex: 1;
 `;
 
 export const Sider = styled.div`
   display: flex;
   flex-direction: column;
-  width: 200px;
-  background-color: #211f27;
-`;
-
-export const MenuBrand = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  text-align: center;
-  cursor: pointer;
-
-  img {
-    margin-right: 8px;
-  }
+  width: 320px;
+  background-color: ${colors.dark};
 `;
 
 export const BottomMenu = styled.div`
+  display: flex;
+  justify-content: center;
   margin-top: auto;
-  padding: 20px 14px;
-  background-color: ${darken(0.05, '#211f27')};
+  padding: 20px 15px;
+  background-color: ${colors.darker};
 `;
 
 export const Content = styled.div`
   display: flex;
   flex: 1;
+  overflow: auto;
 `;
 
 export const Container = styled.div`
