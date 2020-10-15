@@ -1,33 +1,37 @@
 import React from 'react';
-import { FaSignOutAlt } from 'react-icons/fa';
-import { useHistory } from 'react-router-dom';
+import { FaPlus, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import { logout } from '../../services/auth';
-import Button from '../Button';
-import { Sider, Wrapper, Content, BottomMenu, MenuBrand } from './styles';
+import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
 
-import logo from '../../assets/users.svg';
+import Navbar from '../Navbar';
+import BottomLink from '../BottomLink';
 const Layout: React.FC = ({ children }) => {
-  const history = useHistory();
-
-  const handleSignout = (): void => {
-    logout();
-    history.push('/signin');
-  };
-
   return (
     <Wrapper>
-      <Sider>
-        <MenuBrand onClick={() => history.push('/')}>
-          <img src={logo} height="40" />
-          <h2>IHelpU</h2>
-        </MenuBrand>
-        <BottomMenu>
-          <Button onClick={handleSignout}>
-            <FaSignOutAlt /> Sair
-          </Button>
-        </BottomMenu>
-      </Sider>
-      <Content>{children}</Content>
+      <Navbar>hehe</Navbar>
+      <ContentWrapper>
+        <Sider>
+          <BottomMenu>
+            <BottomLink
+              to="/app/rooms/search"
+              name="Procurar"
+              icon={FaSearch}
+            />
+            <BottomLink
+              to="/app/rooms/create"
+              name="Criar grupo"
+              icon={FaPlus}
+            />
+            <BottomLink
+              to="/signin"
+              name="Sair"
+              icon={FaSignOutAlt}
+              onClick={logout}
+            />
+          </BottomMenu>
+        </Sider>
+        <Content>{children}</Content>
+      </ContentWrapper>
     </Wrapper>
   );
 };
