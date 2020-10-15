@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import CreateRoomPage from './CreateRoomPage';
 import EditRoomPage from './EditRoomPage';
 import RoomsListingPage from './RoomsListingPage';
+import SearchRoomPage from './SearchRoomPage';
 
 const Rooms: React.FC = () => {
   return (
@@ -12,6 +13,9 @@ const Rooms: React.FC = () => {
       </Route>
       <Route exact path="/app/rooms/create">
         <CreateRoomPage />
+      </Route>
+      <Route exact path="/app/rooms/search">
+        <SearchRoomPage />
       </Route>
       <Route exact path="/app/rooms/edit/:id">
         <EditRoomPage />
