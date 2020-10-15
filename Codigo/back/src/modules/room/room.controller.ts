@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Param,
   Post,
@@ -15,6 +16,7 @@ import { IRoom } from './room.model';
 import { CreateRoomPayload } from './payload/CreateRoomPayload';
 import { IProfile } from 'modules/profile/profile.model';
 import { EditRoomPayload } from './payload/EditRoomPayload';
+import GenericRequest from 'common/interfaces/GenericRequest';
 
 /**
  * Room Controller
@@ -49,7 +51,7 @@ export class RoomControler {
     @Request() req: { user: IProfile },
     @Body() payload: CreateRoomPayload,
   ): Promise<IRoom> {
-    return await this.roomService.createRoom(payload, req.user._id);
+    return await this.roomService.createRoom(payload, req.user);
   }
 
   @Put(':id')
@@ -58,9 +60,15 @@ export class RoomControler {
   @ApiResponse({ status: 400, description: 'Fetch Rooms Request Failed' })
   async editRoom(
     @Param('id') id: string,
-    @Request() req: { user: IProfile },
+    @Request() req: GenericRequest,
     @Body() payload: EditRoomPayload,
   ): Promise<void> {
+    const room = await this.roomService.getRoomById(id);
+
+    if (room.admin.id !== req.user.id) {
+      throw new ForbiddenException();
+    }
+
     return await this.roomService.editRoom(id, payload);
   }
 }

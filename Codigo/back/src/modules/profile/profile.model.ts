@@ -1,31 +1,25 @@
-import { Schema, Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 import { AppRoles } from 'modules/app/app.roles';
+import { DefaultSchema } from 'common/schemas/default.schema';
+import { IRoom } from 'modules/room/room.model';
 
 /**
  * Mongoose Profile Schema
  */
-export const Profile = new Schema(
-  {
-    username: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    password: {
-      type: String,
-      required: true,
-      select: false /* hide password field when fetching */,
-    },
-    university: { type: String, required: true },
-    avatar: { type: String, required: true },
-    roles: [{ type: String }],
-    date: {
-      type: Date,
-      default: Date.now,
-    },
+export const Profile = new DefaultSchema({
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  password: {
+    type: String,
+    required: true,
+    select: false /* hide password field when fetching */,
   },
-  {
-    id: true,
-  },
-);
+  university: { type: String, required: true },
+  avatar: { type: String, required: true },
+  roles: [{ type: String }],
+  groups: [{ type: Schema.Types.ObjectId, ref: 'Room' }],
+});
 
 /**
  * Mongoose Profile Document
@@ -34,7 +28,6 @@ export interface IProfile extends Document {
   /**
    * UUID
    */
-  readonly _id: Schema.Types.ObjectId;
   readonly id: string;
   /**
    * Username
@@ -61,11 +54,19 @@ export interface IProfile extends Document {
    */
   readonly university: string;
   /**
+   * Rooms
+   */
+  readonly groups: IRoom[];
+  /**
    * Roles
    */
   readonly roles: AppRoles;
   /**
-   * Date
+   * Creation date
    */
-  readonly date: Date;
+  readonly createdAt: Date;
+  /**
+   * Last update
+   */
+  readonly updatedAt: Date;
 }

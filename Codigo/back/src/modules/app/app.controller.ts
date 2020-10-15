@@ -2,7 +2,7 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import GenericRequest from 'modules/common/interfaces/GenericRequest';
+import GenericRequest from 'common/interfaces/GenericRequest';
 import { IProfile } from 'modules/profile/profile.model';
 
 /**
@@ -40,6 +40,7 @@ export class AppController {
   @ApiResponse({ status: 200, description: 'Request Received' })
   @ApiResponse({ status: 400, description: 'Request Failed' })
   getProfile(@Req() req: GenericRequest): IProfile {
+    console.log('req.user', req.user);
     return req.user;
   }
 }

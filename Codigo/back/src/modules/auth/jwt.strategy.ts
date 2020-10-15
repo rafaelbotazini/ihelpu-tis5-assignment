@@ -34,7 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @returns {Promise<boolean>} whether or not to validate the jwt token
    */
   async validate(
-    { iat, exp, _id }: JwtPayload,
+    { iat, exp, id }: JwtPayload,
     done: (error: () => void, user: IProfile) => void,
   ): Promise<boolean> {
     const timeDiff = exp - iat;
@@ -42,7 +42,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
-    const user = await this.profileService.get(_id);
+    const user = await this.profileService.get(id);
+    console.log('user', user);
     if (!user) {
       throw new UnauthorizedException();
     }

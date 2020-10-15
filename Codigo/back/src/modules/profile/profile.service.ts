@@ -11,7 +11,7 @@ import { IProfile } from './profile.model';
 import { RegisterPayload } from 'modules/auth/payload/register.payload';
 import { AppRoles } from '../app/app.roles';
 import { PatchProfilePayload } from './payload/patch.profile.payload';
-import { IGenericMessageBody } from 'modules/common/interfaces/IGenericMessageBody';
+import { IGenericMessageBody } from 'common/interfaces/IGenericMessageBody';
 
 /**
  * Profile Service

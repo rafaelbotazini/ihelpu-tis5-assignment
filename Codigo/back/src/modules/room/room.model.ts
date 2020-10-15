@@ -1,22 +1,16 @@
 import { Schema, Document } from 'mongoose';
+import { DefaultSchema } from 'common/schemas/default.schema';
+import { IProfile } from 'modules/profile/profile.model';
 
 /**
  * Mongoose Room Schema
  */
-export const Room = new Schema(
-  {
-    admin: { type: Schema.Types.ObjectId, required: true },
-    name: { type: String, required: true },
-    avatar: { type: String },
-    date: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-  {
-    id: true,
-  },
-);
+export const Room = new DefaultSchema({
+  name: { type: String, required: true },
+  admin: { type: Schema.Types.ObjectId, ref: 'Profile' },
+  members: { type: Schema.Types.ObjectId, ref: 'Profile' },
+  avatar: { type: String },
+});
 
 /**
  * Mongoose Room Document
@@ -25,12 +19,12 @@ export interface IRoom extends Document {
   /**
    * UUID
    */
-  readonly _id: Schema.Types.ObjectId;
   readonly id: string;
   /**
    * Admin ID
    */
-  readonly admin: Schema.Types.ObjectId;
+  readonly admin: IProfile;
+  readonly members: IProfile[];
   /**
    * Name
    */
@@ -40,7 +34,11 @@ export interface IRoom extends Document {
    */
   readonly avatar: string;
   /**
-   * Date
+   * Creation date
    */
-  readonly date: Date;
+  readonly createdAt: Date;
+  /**
+   * Last update
+   */
+  readonly updatedAt: Date;
 }
