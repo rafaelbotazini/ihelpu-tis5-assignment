@@ -15,3 +15,6 @@ export const edit = (room: Room): Promise<void> =>
 
 export const join = (roomId: string): Promise<void> =>
   apiRequest.post(`/room/${roomId}/join`);
+
+export const leave = (roomId: string): Promise<void> =>
+  apiRequest.post(`/room/${roomId}/leave`);
