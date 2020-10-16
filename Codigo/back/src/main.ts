@@ -43,10 +43,6 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(SWAGGER_API_ROOT, app, document);
 
-  app.enableCors({
-    origin: true,
-  });
-
   app.register(headers, {
     contentSecurityPolicy: {
       directives: {
@@ -57,6 +53,8 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
       },
     },
   });
+
+  app.enableCors();
 
   // app.register(fastifyRateLimiter, {
   //   max: 100,
