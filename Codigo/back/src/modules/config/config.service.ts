@@ -26,12 +26,12 @@ export class ConfigService {
     const config = fs.existsSync('.env')
       ? parse(fs.readFileSync(filePath))
       : {
-        APP_ENV: process.env.APP_ENV,
-        APP_URL: process.env.APP_URL,
-        WEBTOKEN_SECRET_KEY: process.env.WEBTOKEN_SECRET_KEY,
-        WEBTOKEN_EXPIRATION_TIME: process.env.WEBTOKEN_EXPIRATION_TIME,
-        DB_URL: process.env.DB_URL,
-    };
+          APP_ENV: process.env.APP_ENV,
+          APP_URL: process.env.APP_URL,
+          WEBTOKEN_SECRET_KEY: process.env.WEBTOKEN_SECRET_KEY,
+          WEBTOKEN_EXPIRATION_TIME: process.env.WEBTOKEN_EXPIRATION_TIME,
+          DB_URL: process.env.DB_URL,
+        };
 
     this.envConfig = ConfigService.validateInput(config);
   }
