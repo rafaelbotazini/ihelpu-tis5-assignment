@@ -58,7 +58,7 @@ export class RoomService {
     return user.groups;
   }
 
-  async join(roomId: string, user: IProfile): Promise<void> {
+  async join(roomId: string, user: IProfile): Promise<IRoom> {
     const room = await this.getRoomById(roomId);
 
     await user.populate('groups').execPopulate();
@@ -79,6 +79,8 @@ export class RoomService {
 
     await user.save();
     await room.save();
+
+    return room;
   }
 
   async leave(roomId: string, user: IProfile): Promise<void> {

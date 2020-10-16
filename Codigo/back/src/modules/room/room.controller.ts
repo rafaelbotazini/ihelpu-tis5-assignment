@@ -58,8 +58,8 @@ export class RoomControler {
   async join(
     @Param('id') id: string,
     @Request() req: GenericRequest,
-  ): Promise<void> {
-    await this.roomService.join(id, req.user);
+  ): Promise<IRoom> {
+    return await this.roomService.join(id, req.user);
   }
 
   @Post(':id/leave')
