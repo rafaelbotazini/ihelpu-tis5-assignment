@@ -34,6 +34,9 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
     AppModule,
     new FastifyAdapter({ logger: true }),
   );
+
+  app.enableCors();
+
   const options = new DocumentBuilder()
     .setTitle(SWAGGER_API_NAME)
     .setDescription(SWAGGER_API_DESCRIPTION)
@@ -53,8 +56,6 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
       },
     },
   });
-
-  app.enableCors();
 
   // app.register(fastifyRateLimiter, {
   //   max: 100,
