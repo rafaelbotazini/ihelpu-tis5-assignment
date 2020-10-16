@@ -12,6 +12,7 @@ import { RegisterPayload } from 'modules/auth/payload/register.payload';
 import { AppRoles } from '../app/app.roles';
 import { PatchProfilePayload } from './payload/patch.profile.payload';
 import { IGenericMessageBody } from 'common/interfaces/IGenericMessageBody';
+import { IRoom } from 'modules/room/room.model';
 
 /**
  * Profile Service
@@ -123,6 +124,17 @@ export class ProfileService {
           `Failed to delete a profile by the name of ${email}.`,
         );
       }
+    });
+  }
+
+  /**
+   * Remove a room reference from user profile
+   * @param user the user
+   * @param roomId the room id
+   */
+  async leaveRoom(user: IProfile, room: IRoom): Promise<void> {
+    await this.profileModel.findByIdAndUpdate(user.id, {
+      $pullAll: { groups: [room] },
     });
   }
 

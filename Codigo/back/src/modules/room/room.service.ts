@@ -1,6 +1,10 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { IRoom } from './room.model';
 import { CreateRoomPayload } from './payload/CreateRoomPayload';
 import { EditRoomPayload } from './payload/EditRoomPayload';
@@ -77,9 +81,36 @@ export class RoomService {
     await room.save();
   }
 
+  async leave(roomId: string, user: IProfile): Promise<void> {
+    const room = await this.getRoomById(roomId);
+
+    await user.populate('groups').execPopulate();
+    await room.populate('admin').execPopulate();
+
+    if (!room) {
+      throw new NotFoundException(`The room with id  ${roomId} was not found`);
+    }
+
+    if (this.userIsAdmin(room, user)) {
+      throw new BadRequestException('O administrador não pode sair da sala.');
+    }
+
+    // remove user from room
+    await this.roomModel.findByIdAndUpdate(room.id, {
+      $pullAll: { members: [user] },
+    });
+
+    // remove room from user
+    await this.profileService.leaveRoom(user, room);
+  }
+
   userIsMember(room: IRoom, user: IProfile): boolean {
     return (
-      user.id === room.admin.id || user.groups.some((r) => r.id === room.id)
+      this.userIsAdmin(room, user) || user.groups.some((r) => r.id === room.id)
     );
+  }
+
+  userIsAdmin(room: IRoom, user: IProfile): boolean {
+    return user.id === room.admin.id;
   }
 }

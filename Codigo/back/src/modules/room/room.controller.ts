@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoomService } from './room.service';
 import { IRoom } from './room.model';
 import { CreateRoomPayload } from './payload/CreateRoomPayload';
@@ -28,32 +28,24 @@ export class RoomControler {
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
-  @ApiResponse({ status: 200, description: 'Fetch Rooms Request Received' })
-  @ApiResponse({ status: 400, description: 'Fetch Rooms Request Failed' })
   async listRooms(): Promise<IRoom[]> {
     return await this.roomService.listRooms();
   }
 
   @Get('/subscribed')
   @UseGuards(AuthGuard('jwt'))
-  @ApiResponse({ status: 200, description: 'Fetch Rooms Request Received' })
-  @ApiResponse({ status: 400, description: 'Fetch Rooms Request Failed' })
   async listRoomsByUser(@Request() req: GenericRequest): Promise<IRoom[]> {
     return await this.roomService.getRoomByUser(req.user);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
-  @ApiResponse({ status: 200, description: 'Fetch Rooms Request Received' })
-  @ApiResponse({ status: 400, description: 'Fetch Rooms Request Failed' })
   async getRoom(@Param('id') id: string): Promise<IRoom> {
     return await this.roomService.getRoomById(id);
   }
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  @ApiResponse({ status: 201, description: 'Create Room Request Received' })
-  @ApiResponse({ status: 400, description: 'Create Room Request Failed' })
   async createRoom(
     @Request() req: GenericRequest,
     @Body() payload: CreateRoomPayload,
@@ -63,8 +55,6 @@ export class RoomControler {
 
   @Post(':id/join')
   @UseGuards(AuthGuard('jwt'))
-  @ApiResponse({ status: 200, description: 'Join Room Request Received' })
-  @ApiResponse({ status: 400, description: 'Join Room Request Failed' })
   async join(
     @Param('id') id: string,
     @Request() req: GenericRequest,
@@ -72,10 +62,17 @@ export class RoomControler {
     await this.roomService.join(id, req.user);
   }
 
+  @Post(':id/leave')
+  @UseGuards(AuthGuard('jwt'))
+  async leave(
+    @Param('id') id: string,
+    @Request() req: GenericRequest,
+  ): Promise<void> {
+    await this.roomService.leave(id, req.user);
+  }
+
   @Put(':id')
   @UseGuards(AuthGuard('jwt'))
-  @ApiResponse({ status: 200, description: 'Fetch Rooms Request Received' })
-  @ApiResponse({ status: 400, description: 'Fetch Rooms Request Failed' })
   async editRoom(
     @Param('id') id: string,
     @Request() req: GenericRequest,
