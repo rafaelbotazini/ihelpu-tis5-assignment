@@ -44,7 +44,7 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
   SwaggerModule.setup(SWAGGER_API_ROOT, app, document);
 
   app.enableCors({
-    origin: false,
+    origin: true,
   });
 
   app.register(headers, {
