@@ -1,11 +1,10 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
   MinLength,
   IsAlphanumeric,
-  Matches,
-} from "class-validator";
+} from 'class-validator';
 
 /**
  * Register Payload Class
@@ -20,6 +19,16 @@ export class RegisterPayload {
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  /**
+   * Username field
+   */
+  @ApiProperty({
+    required: true,
+  })
+  @IsAlphanumeric()
+  @IsNotEmpty()
+  username: string;
 
   /**
    * Name field

@@ -1,12 +1,14 @@
-import { Controller, Delete, Get, Param, Req, UseGuards } from "@nestjs/common";
-import { AppService } from "./app.service";
-import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
-import { AuthGuard } from "@nestjs/passport";
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { AppService } from './app.service';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import GenericRequest from 'common/interfaces/GenericRequest';
+import { IProfile } from 'modules/profile/profile.model';
 
 /**
  * App Controller
  */
-@Controller()
+@Controller('/api')
 @ApiBearerAuth()
 export class AppController {
   /**
@@ -21,9 +23,9 @@ export class AppController {
    * @returns {string} the application environment url
    */
   @Get()
-  @UseGuards(AuthGuard("jwt"))
-  @ApiResponse({ status: 200, description: "Request Received" })
-  @ApiResponse({ status: 400, description: "Request Failed" })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiResponse({ status: 200, description: 'Request Received' })
+  @ApiResponse({ status: 400, description: 'Request Failed' })
   getString(): string {
     return this.appService.root();
   }
@@ -31,13 +33,13 @@ export class AppController {
   /**
    * Fetches request metadata
    * @param {Req} req the request body
-   * @returns {Partial<Request>} the request user populated from the passport module
+   * @returns {IProfile} the request user populated from the passport module
    */
-  @Get("request/user")
-  @UseGuards(AuthGuard("jwt"))
-  @ApiResponse({ status: 200, description: "Request Received" })
-  @ApiResponse({ status: 400, description: "Request Failed" })
-  getProfile(@Req() req): Partial<Request> {
+  @Get('request/user')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiResponse({ status: 200, description: 'Request Received' })
+  @ApiResponse({ status: 400, description: 'Request Failed' })
+  getProfile(@Req() req: GenericRequest): IProfile {
     return req.user;
   }
 }

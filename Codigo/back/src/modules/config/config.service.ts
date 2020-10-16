@@ -1,6 +1,6 @@
-import { parse } from "dotenv";
-import * as joi from "@hapi/joi";
-import * as fs from "fs";
+import { parse } from 'dotenv';
+import * as joi from '@hapi/joi';
+import * as fs from 'fs';
 
 /**
  * Key-value mapping
@@ -23,7 +23,16 @@ export class ConfigService {
    * @param {string} filePath
    */
   constructor(filePath: string) {
-    const config = parse(fs.readFileSync(filePath));
+    const config = fs.existsSync('.env')
+      ? parse(fs.readFileSync(filePath))
+      : {
+        APP_ENV: process.env.APP_ENV,
+        APP_URL: process.env.APP_URL,
+        WEBTOKEN_SECRET_KEY: process.env.WEBTOKEN_SECRET_KEY,
+        WEBTOKEN_EXPIRATION_TIME: process.env.WEBTOKEN_EXPIRATION_TIME,
+        DB_URL: process.env.DB_URL,
+    };
+
     this.envConfig = ConfigService.validateInput(config);
   }
 
@@ -38,10 +47,7 @@ export class ConfigService {
      * A schema to validate envConfig against
      */
     const envVarsSchema: joi.ObjectSchema = joi.object({
-      APP_ENV: joi
-        .string()
-        .valid("dev", "prod")
-        .default("dev"),
+      APP_ENV: joi.string().valid('dev', 'prod').default('dev'),
       APP_URL: joi.string().uri({
         scheme: [/https?/],
       }),

@@ -1,11 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsEmail,
-  IsNotEmpty,
-  MinLength,
-  IsAlphanumeric,
-  Matches,
-} from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsAlphanumeric } from 'class-validator';
 
 /**
  * Patch Profile Payload Class
@@ -32,16 +26,18 @@ export class PatchProfilePayload {
   /**
    * Name field
    */
-  @ApiProperty()
-  @Matches(/^[a-zA-Z ]+$/)
+  @ApiProperty({
+    required: true,
+  })
   @IsNotEmpty()
   name: string;
 
   /**
-   * Password field
+   * University field
    */
-  @ApiProperty()
+  @ApiProperty({
+    required: true,
+  })
   @IsNotEmpty()
-  @MinLength(8)
-  password: string;
+  university: string;
 }
