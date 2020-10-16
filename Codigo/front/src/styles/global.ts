@@ -27,6 +27,10 @@ export default createGlobalStyle`
     margin-bottom: 1.5rem;
   }
 
+  p {
+    margin-bottom: 1rem;
+  }
+
   label {
     display: block;
     margin-bottom: 0.8rem;

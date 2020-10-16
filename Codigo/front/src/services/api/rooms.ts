@@ -11,4 +11,10 @@ export const get = (id: string): Promise<Room> =>
   apiRequest.get('/room/' + id).then(({ data }) => data);
 
 export const edit = (room: Room): Promise<void> =>
-  apiRequest.put('/room/' + room._id, room);
+  apiRequest.put('/room/' + room.id, room);
+
+export const join = (roomId: string): Promise<Room> =>
+  apiRequest.post(`/room/${roomId}/join`).then(({ data }) => data);
+
+export const leave = (roomId: string): Promise<void> =>
+  apiRequest.post(`/room/${roomId}/leave`);

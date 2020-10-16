@@ -54,7 +54,7 @@ export class AuthService {
    * @returns {Promise<ITokenReturnBody>} token body
    */
   async createToken({
-    _id,
+    id,
     username,
     email,
     avatar,
@@ -62,7 +62,7 @@ export class AuthService {
     return {
       expires: this.expiration,
       expiresPrettyPrint: AuthService.prettyPrintSeconds(this.expiration),
-      token: this.jwtService.sign({ _id, username, email, avatar }),
+      token: this.jwtService.sign({ id, username, email, avatar }),
     };
   }
 

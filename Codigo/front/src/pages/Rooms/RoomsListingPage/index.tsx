@@ -21,10 +21,10 @@ const RoomsListingPage: React.FC = () => {
         <CardList>
           {rooms.map((room) => (
             <RoomCard
-              key={room._id}
+              key={room.id}
               room={room}
               renderActions={() => (
-                <Link to={'/app/rooms/edit/' + room._id}>Editar Sala</Link>
+                <Link to={'/app/rooms/edit/' + room.id}>Editar Sala</Link>
               )}
             />
           ))}

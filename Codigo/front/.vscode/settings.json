@@ -4,8 +4,10 @@
     },
     "[typescript]": {
         "editor.tabSize": 2,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[typescriptreact]": {
         "editor.tabSize": 2,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     }
 }

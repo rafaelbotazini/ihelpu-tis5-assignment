@@ -14,7 +14,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProfileService } from './profile.service';
 import { PatchProfilePayload } from './payload/patch.profile.payload';
 import { IProfile } from './profile.model';
-import { IGenericMessageBody } from 'modules/common/interfaces/IGenericMessageBody';
+import { IGenericMessageBody } from 'common/interfaces/IGenericMessageBody';
 
 /**
  * Profile Controller

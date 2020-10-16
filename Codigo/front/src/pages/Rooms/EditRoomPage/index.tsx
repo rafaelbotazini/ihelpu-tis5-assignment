@@ -17,8 +17,7 @@ const EditRoomPage: React.FC = () => {
   const { id } = useParams<PageParams>();
 
   const [room, setRoom] = useState<Room>({
-    _id: '',
-    admin: '',
+    id: '',
     name: '',
     avatar: '',
   });

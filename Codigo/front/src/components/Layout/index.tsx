@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaPlus, FaSearch, FaSignOutAlt } from 'react-icons/fa';
-import { logout } from '../../services/auth';
 import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
-
 import Navbar from '../Navbar';
 import BottomLink from '../BottomLink';
+import SideBarMenu from '../SideBarMenu';
+import { useCurrentUser } from '../../contexts/currentUser';
+import api from '../../services/api';
+import { logout } from '../../services/auth';
+
 const Layout: React.FC = ({ children }) => {
+  const { user, setUser } = useCurrentUser();
+
+  useEffect(() => {
+    if (!user) {
+      api.profile.getCurrent().then(setUser).catch(console.log);
+    }
+  }, [setUser, user]);
+
+  const handleLogout = (): void => {
+    setUser(undefined);
+    logout();
+  };
+
   return (
     <Wrapper>
       <Navbar />
       <ContentWrapper>
         <Sider>
+          <SideBarMenu />
           <BottomMenu>
             <BottomLink
               to="/app/rooms/search"
@@ -26,7 +43,7 @@ const Layout: React.FC = ({ children }) => {
               to="/signin"
               name="Sair"
               icon={FaSignOutAlt}
-              onClick={logout}
+              onClick={handleLogout}
             />
           </BottomMenu>
         </Sider>

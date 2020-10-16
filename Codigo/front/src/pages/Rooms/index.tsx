@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import ChatPage from './ChatPage';
 import CreateRoomPage from './CreateRoomPage';
 import EditRoomPage from './EditRoomPage';
 import RoomsListingPage from './RoomsListingPage';
@@ -19,6 +20,9 @@ const Rooms: React.FC = () => {
       </Route>
       <Route exact path="/app/rooms/edit/:id">
         <EditRoomPage />
+      </Route>
+      <Route exact path="/app/rooms/:id">
+        <ChatPage />
       </Route>
     </Switch>
   );
