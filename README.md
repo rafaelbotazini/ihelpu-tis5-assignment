@@ -3,7 +3,8 @@
 </h1>
 <p align="center">🚀 Aplicação para criação de grupos de conversas sobre tópicos acadêmicos.</p>
 
-<img src="https://img.shields.io/static/v1?label=ChatRoom&message=iHelpU&color=7159c1&style=for-the-badge&logo=ghost"/>
+[![Chat App](https://img.shields.io/static/v1?label=ChatRoom&message=iHelpU&color=7159c1&style=for-the-badge&logo=react)](https://ihelpu-web.netlify.app)
+[![Swagger API Docs](https://img.shields.io/badge/Swagger-API%20Docs-brightgreen?style=for-the-badge&logo=Swagger)](https://ihelpu-tis.herokuapp.com/api/docs/)
 
 ## Alunos integrantes da equipe
 

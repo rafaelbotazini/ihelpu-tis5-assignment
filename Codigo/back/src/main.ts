@@ -34,6 +34,9 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
     AppModule,
     new FastifyAdapter({ logger: true }),
   );
+
+  app.enableCors();
+
   const options = new DocumentBuilder()
     .setTitle(SWAGGER_API_NAME)
     .setDescription(SWAGGER_API_DESCRIPTION)
@@ -42,10 +45,6 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(SWAGGER_API_ROOT, app, document);
-
-  app.enableCors({
-    origin: false,
-  });
 
   app.register(headers, {
     contentSecurityPolicy: {
