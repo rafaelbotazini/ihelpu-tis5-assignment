@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FaPlus, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
 import Navbar from '../Navbar';
@@ -7,18 +7,27 @@ import SideBarMenu from '../SideBarMenu';
 import { useCurrentUser } from '../../contexts/currentUser';
 import api from '../../services/api';
 import { logout } from '../../services/auth';
+import { UserGroupsContext } from '../../contexts/UserGroupsContext';
+import { Room } from '../../models/Room';
 
 const Layout: React.FC = ({ children }) => {
-  const { user, setUser } = useCurrentUser();
+  const currentUser = useCurrentUser();
+  const userGroups = useContext(UserGroupsContext);
 
   useEffect(() => {
-    if (!user) {
-      api.profile.getCurrent().then(setUser).catch(console.log);
+    if (!currentUser.user) {
+      api.profile
+        .getCurrent()
+        .then((userData) => {
+          currentUser.setUser(userData);
+          userGroups.setRooms(userData.groups as Room[]);
+        })
+        .catch(console.log);
     }
-  }, [setUser, user]);
+  }, [currentUser, userGroups]);
 
   const handleLogout = (): void => {
-    setUser(undefined);
+    currentUser.setUser(undefined);
     logout();
   };
 

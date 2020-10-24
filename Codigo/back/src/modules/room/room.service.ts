@@ -34,6 +34,15 @@ export class RoomService {
       name: payload.name,
       admin: admin._id,
     });
+
+    // add room to joined groups
+    admin.groups.push(room);
+    await admin.save();
+
+    // add admin to members list
+    room.members.push(admin);
+    await room.save();
+
     return room;
   }
 
