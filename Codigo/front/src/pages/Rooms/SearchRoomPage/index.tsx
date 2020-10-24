@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
 import RoomCard from '../../../components/RoomCard';
@@ -16,7 +17,8 @@ import {
 } from './styles';
 
 const SearchRoomPage: React.FC = () => {
-  const { addRoom } = useContext(UserGroupsContext);
+  const history = useHistory();
+  const { rooms, addRoom } = useContext(UserGroupsContext);
   const [results, setResults] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -51,11 +53,19 @@ const SearchRoomPage: React.FC = () => {
               <RoomCard
                 key={room.id}
                 room={room}
-                renderActions={() => (
-                  <Button onClick={() => handleJoin(room.id)}>
-                    Participar
-                  </Button>
-                )}
+                renderActions={() =>
+                  rooms.some((r) => r.id === room.id) ? (
+                    <Button
+                      onClick={() => history.push(`/app/rooms/${room.id}`)}
+                    >
+                      Entrar
+                    </Button>
+                  ) : (
+                    <Button onClick={() => handleJoin(room.id)}>
+                      Participar
+                    </Button>
+                  )
+                }
               />
             ))}
         </CardList>
