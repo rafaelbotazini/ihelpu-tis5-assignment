@@ -11,6 +11,7 @@ import Rooms from './pages/Rooms';
 
 import { Profile } from './models/Profile';
 import { CurrentUserContext } from './contexts/currentUser';
+import { UserGroupsContextProvider } from './contexts/UserGroupsContext';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<Profile>();
@@ -30,17 +31,19 @@ const App: React.FC = () => {
           </Route>
           <PrivateRoute path="/app">
             <CurrentUserContext.Provider value={{ user, setUser }}>
-              <Layout>
-                <Switch>
-                  <Route exact path="/app">
-                    <Redirect to="/app/rooms" />
-                  </Route>
-                  <Route path="/app/rooms">
-                    <Rooms />
-                  </Route>
-                  <Route path="/app/*">404 Not found</Route>
-                </Switch>
-              </Layout>
+              <UserGroupsContextProvider>
+                <Layout>
+                  <Switch>
+                    <Route exact path="/app">
+                      <Redirect to="/app/rooms" />
+                    </Route>
+                    <Route path="/app/rooms">
+                      <Rooms />
+                    </Route>
+                    <Route path="/app/*">404 Not found</Route>
+                  </Switch>
+                </Layout>
+              </UserGroupsContextProvider>
             </CurrentUserContext.Provider>
           </PrivateRoute>
           <Route path="*">404 Not found</Route>
