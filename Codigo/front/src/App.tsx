@@ -18,20 +18,20 @@ const App: React.FC = () => {
 
   return (
     <React.Fragment>
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/">
-            <Redirect to="/app" />
-          </Route>
-          <Route exact path="/signin">
-            <SignIn />
-          </Route>
-          <Route exact path="/signup">
-            <SignUp />
-          </Route>
-          <PrivateRoute path="/app">
-            <CurrentUserContext.Provider value={{ user, setUser }}>
-              <UserGroupsContextProvider>
+      <CurrentUserContext.Provider value={{ user, setUser }}>
+        <UserGroupsContextProvider>
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/">
+                <Redirect to="/app" />
+              </Route>
+              <Route exact path="/signin">
+                <SignIn />
+              </Route>
+              <Route exact path="/signup">
+                <SignUp />
+              </Route>
+              <PrivateRoute path="/app">
                 <Layout>
                   <Switch>
                     <Route exact path="/app">
@@ -43,13 +43,12 @@ const App: React.FC = () => {
                     <Route path="/app/*">404 Not found</Route>
                   </Switch>
                 </Layout>
-              </UserGroupsContextProvider>
-            </CurrentUserContext.Provider>
-          </PrivateRoute>
-          <Route path="*">404 Not found</Route>
-        </Switch>
-      </BrowserRouter>
-
+              </PrivateRoute>
+              <Route path="*">404 Not found</Route>
+            </Switch>
+          </BrowserRouter>
+        </UserGroupsContextProvider>
+      </CurrentUserContext.Provider>
       <GlobalStyle />
     </React.Fragment>
   );
