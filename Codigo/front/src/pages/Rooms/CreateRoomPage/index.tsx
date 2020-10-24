@@ -8,7 +8,6 @@ import api from '../../../services/api';
 
 const CreateRoomPage: React.FC = () => {
   const history = useHistory();
-
   const [name, setName] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void =>
@@ -18,9 +17,10 @@ const CreateRoomPage: React.FC = () => {
     e.preventDefault();
 
     if (!name) return;
-    // TODO: send to actual room
 
-    api.rooms.create(name).then(() => history.push('/app/rooms'));
+    api.rooms.create(name).then(() => {
+      history.push('/app/rooms');
+    });
   };
 
   return (

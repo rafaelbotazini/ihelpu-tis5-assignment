@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
 import RoomCard from '../../../components/RoomCard';
 import { useCurrentUser } from '../../../contexts/currentUser';
+import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
 import {
@@ -15,7 +16,7 @@ import {
 } from './styles';
 
 const SearchRoomPage: React.FC = () => {
-  const { setUser } = useCurrentUser();
+  const { addRoom } = useContext(UserGroupsContext);
   const [results, setResults] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -27,15 +28,7 @@ const SearchRoomPage: React.FC = () => {
   }, []);
 
   const handleJoin = async (roomId: string): Promise<void> => {
-    await api.rooms.join(roomId).then((room) => {
-      if (room) {
-        setUser((user) => {
-          if (!user) return user;
-          const groups = (user.groups as Room[]).concat([room]);
-          return { ...user, groups };
-        });
-      }
-    });
+    await api.rooms.join(roomId).then(addRoom);
   };
 
   return (
