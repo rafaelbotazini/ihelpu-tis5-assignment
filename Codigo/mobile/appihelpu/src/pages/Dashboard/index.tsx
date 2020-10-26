@@ -3,8 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 
 import Button from '../../components/Button';
 
-import { logout } from '../../services/auth';
-
 import {
   Container,
   Header,
@@ -13,9 +11,11 @@ import {
   ProfileButton,
   UserAvatar,
 } from './styles';
+import { useAuth } from '../../context/AuthContext';
 
 const Dashboard: React.FC = () => {
   const { navigate } = useNavigation();
+  const { user, signOut } = useAuth();
 
   const navigateToProfile = useCallback(() => {
     navigate('Profile');
@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
       <Header>
         <HeaderTitle>
           Bem vindo, {'\n'}
-          <UserName>Matheus</UserName>
+          <UserName>{user && user.name}</UserName>
         </HeaderTitle>
         <ProfileButton onPress={navigateToProfile}>
           <UserAvatar
@@ -44,14 +44,7 @@ const Dashboard: React.FC = () => {
       >
         Editar dados
       </Button>
-      <Button
-        onPress={() => {
-          logout();
-          navigate('SignIn');
-        }}
-      >
-        Logout
-      </Button>
+      <Button onPress={signOut}>Logout</Button>
     </Container>
   );
 };

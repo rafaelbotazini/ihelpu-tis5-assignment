@@ -11,8 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
-import signUpForm from '../../models/SignUpForm';
-import { login } from '../../services/auth';
+import { SignUpPayload } from '../../models/SignUpPayload';
 
 import getValidationErrors from '../../utils/getValidationErrors';
 
@@ -32,18 +31,13 @@ import {
   BackToSignInText,
 } from './styles';
 import { signUp } from '../../services/api/auth';
-
-// interface SignUpFormData {
-//   name: string;
-//   username: string;
-//   university: string;
-//   email: string;
-//   password: string;
-// }
+import { useAuth } from '../../context/AuthContext';
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+
+  const { signIn } = useAuth();
 
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
@@ -51,7 +45,7 @@ const SignUp: React.FC = () => {
   const universityInputRef = useRef<TextInput>(null);
 
   const handleSignUp = useCallback(
-    async (data: signUpForm) => {
+    async (data: SignUpPayload) => {
       try {
         formRef.current?.setErrors({});
 
@@ -69,8 +63,8 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        const res = await signUp(data);
-        await login(res.data.token);
+        await signUp(data);
+        await signIn(data);
 
         Alert.alert(
           'Cadastro realizado com sucesso!',
@@ -79,6 +73,7 @@ const SignUp: React.FC = () => {
 
         navigation.navigate('Dashboard');
       } catch (err) {
+        console.log(err);
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 
@@ -93,7 +88,7 @@ const SignUp: React.FC = () => {
         );
       }
     },
-    [navigation],
+    [navigation, signIn],
   );
 
   return (
