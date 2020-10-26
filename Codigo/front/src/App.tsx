@@ -13,6 +13,8 @@ import { Profile } from './models/Profile';
 import { CurrentUserContext } from './contexts/currentUser';
 import { UserGroupsContextProvider } from './contexts/UserGroupsContext';
 
+import './services/wsRequest';
+
 const App: React.FC = () => {
   const [user, setUser] = useState<Profile>();
 
