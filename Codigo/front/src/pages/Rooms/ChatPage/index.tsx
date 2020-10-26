@@ -44,7 +44,10 @@ const ChatPage: React.FC = () => {
           msg.ack();
         },
       );
-      return unsubscribe;
+      return () => {
+        setMessages([]);
+        unsubscribe();
+      };
     }
   }, [connected, id]);
 
