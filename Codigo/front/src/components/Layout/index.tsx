@@ -4,14 +4,14 @@ import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
 import Navbar from '../Navbar';
 import BottomLink from '../BottomLink';
 import SideBarMenu from '../SideBarMenu';
-import { useCurrentUser } from '../../contexts/currentUser';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import api from '../../services/api';
 import { logout } from '../../services/auth';
 import { UserGroupsContext } from '../../contexts/UserGroupsContext';
 import { Room } from '../../models/Room';
 
 const Layout: React.FC = ({ children }) => {
-  const currentUser = useCurrentUser();
+  const currentUser = useContext(CurrentUserContext);
   const userGroups = useContext(UserGroupsContext);
 
   useEffect(() => {

@@ -12,6 +12,10 @@ export const SideMenuItem = styled.div`
   display: flex;
   padding: 15px;
   align-items: center;
+
+  @media screen and (max-width: 992px) {
+    display: none;
+  }
 `;
 
 export const SideMenuLink = styled(NavLink)`
@@ -40,4 +44,7 @@ export const AvatarWrapper = styled.div`
 export const FlexDiv = styled.div`
   display: flex;
   flex: 1;
+  @media screen and (max-width: 992px) {
+    display: none;
+  }
 `;

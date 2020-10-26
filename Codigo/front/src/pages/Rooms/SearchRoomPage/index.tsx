@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
 import RoomCard from '../../../components/RoomCard';
-import { useCurrentUser } from '../../../contexts/currentUser';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
@@ -30,7 +29,10 @@ const SearchRoomPage: React.FC = () => {
   }, []);
 
   const handleJoin = async (roomId: string): Promise<void> => {
-    await api.rooms.join(roomId).then(addRoom);
+    await api.rooms
+      .join(roomId)
+      .then(addRoom)
+      .then(() => history.push(`/app/rooms/${roomId}`));
   };
 
   return (
