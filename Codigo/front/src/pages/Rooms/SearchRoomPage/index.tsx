@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
 import RoomCard from '../../../components/RoomCard';
-import { useCurrentUser } from '../../../contexts/currentUser';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
