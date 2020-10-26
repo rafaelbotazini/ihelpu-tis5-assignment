@@ -1,4 +1,5 @@
 import React, { useRef, useCallback } from 'react';
+
 import {
   Image,
   View,
@@ -8,20 +9,6 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
-import * as Yup from 'yup';
-import { SignUpPayload } from '../../models/SignUpPayload';
-
-import getValidationErrors from '../../utils/getValidationErrors';
-
-import { Form } from '@unform/mobile';
-import { FormHandles } from '@unform/core';
-
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-
-import logoImg from '../../assets/logo@128px.png';
 
 import {
   Container,
@@ -30,8 +17,23 @@ import {
   BackToSignIn,
   BackToSignInText,
 } from './styles';
+
+import Icon from 'react-native-vector-icons/Feather';
+import logoImg from '../../assets/logo@128px.png';
+
+import { useNavigation } from '@react-navigation/native';
+
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
+import getValidationErrors from '../../utils/getValidationErrors';
+
+import { SignUpPayload } from '../../models/SignUpPayload';
 import { signUp } from '../../services/api/auth';
 import { useAuth } from '../../context/AuthContext';
+
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
@@ -73,7 +75,6 @@ const SignUp: React.FC = () => {
 
         navigation.navigate('Dashboard');
       } catch (err) {
-        console.log(err);
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 

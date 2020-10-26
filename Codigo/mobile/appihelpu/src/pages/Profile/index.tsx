@@ -9,29 +9,28 @@ import {
   Alert,
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/Feather';
+
+import { Container, Title, BackButton } from './styles';
+
 import { useNavigation } from '@react-navigation/native';
-import * as Yup from 'yup';
 
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
-import Icon from 'react-native-vector-icons/Feather';
+import * as Yup from 'yup';
+import getValidationErrors from '../../utils/getValidationErrors';
+
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { UpdateUserPayload } from '../../models/UpdateUserPayload';
-
-import getValidationErrors from '../../utils/getValidationErrors';
-
 import { useAuth } from '../../context/AuthContext';
 
-import { Container, Title, BackButton } from './styles';
-
 const Profile: React.FC = () => {
-  const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
 
+  const formRef = useRef<FormHandles>(null);
   const emailInputRef = useRef<TextInput>(null);
-  // const passwordInputRef = useRef<TextInput>(null);
   const usernameInputRef = useRef<TextInput>(null);
   const universityInputRef = useRef<TextInput>(null);
 
@@ -75,10 +74,7 @@ const Profile: React.FC = () => {
 
         await updateUser(data);
 
-        Alert.alert(
-          'Usuário modificado com sucesso!',
-          'Você já pode utilizar a aplicação.',
-        );
+        Alert.alert('Dados modificados com sucesso!');
 
         navigation.navigate('Dashboard');
       } catch (err) {

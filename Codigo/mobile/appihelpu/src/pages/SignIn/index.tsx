@@ -8,22 +8,6 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
-import * as Yup from 'yup';
-
-import { Credentials } from '../../models/Credentials';
-
-import { Form } from '@unform/mobile';
-import { FormHandles } from '@unform/core';
-import { useAuth } from '../../context/AuthContext';
-
-import getValidationErrors from '../../utils/getValidationErrors';
-
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-
-import logoImg from '../../assets/logo@128px.png';
 
 import {
   Container,
@@ -35,13 +19,32 @@ import {
   CreateAccountButtonText,
 } from './styles';
 
+import Icon from 'react-native-vector-icons/Feather';
+import logoImg from '../../assets/logo@128px.png';
+
+import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
+
+import { Credentials } from '../../models/Credentials';
+
+import { useAuth } from '../../context/AuthContext';
+
+import getValidationErrors from '../../utils/getValidationErrors';
+
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+
 const SignIn: React.FC = () => {
   /**
    * utilizamos as ref para manipular o form de maneira direta e não por um evento
    */
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
+
   const navigation = useNavigation();
+
   const currentUser = useAuth();
 
   // recuperar os dados que estão sendo passados no form
@@ -62,10 +65,7 @@ const SignIn: React.FC = () => {
         });
 
         await currentUser.signIn(data);
-
-        // navigation.navigate('Dashboard');
       } catch (err) {
-        console.log(err);
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 

@@ -32,3 +32,14 @@ export const UserAvatar = styled.Image`
   height: 56px;
   border-radius: 28px;
 `;
+
+export const UserDataListTitle = styled.Text`
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #f4ede8;
+  font-family: 'RobotoSlab-Medium';
+`;
+
+export const UserDataList = styled.View`
+  padding: 32px 24px 16px;
+`;
