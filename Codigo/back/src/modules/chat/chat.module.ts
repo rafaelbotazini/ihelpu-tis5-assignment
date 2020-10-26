@@ -1,26 +1,19 @@
 import { Module } from '@nestjs/common';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ChatService } from './chat.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ChatController } from './chat.controller';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'CHAT_MQ_CLIENT',
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://localhost:5672'],
-          // urls: [
-          //   'amqps://elqpxlad:jAgQ_Y2iuiR0HXlvF-RWcEXm7wSbPI8t@jackal.rmq.cloudamqp.com/elqpxlad',
-          // ],
-          queue: 'chats_queue',
-          queueOptions: {
-            durable: false,
-          },
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      exchanges: [
+        {
+          name: 'chat_messages',
+          type: 'topic',
         },
-      },
-    ]),
+      ],
+      uri: 'amqp://localhost:5672',
+    }),
   ],
   providers: [ChatService],
   exports: [ChatService],

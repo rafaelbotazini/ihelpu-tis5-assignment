@@ -9,9 +9,12 @@ client.connect(
   () => {
     console.log('client.connected', client.connected);
     client.send(
-      '/amq/queue/chats_queue',
+      '/exchange/chat_messages/send_text.42',
       { 'content-type': 'text/plain' },
-      JSON.stringify({ data: 'TESTE', pattern: 'chats_queue' }),
+      JSON.stringify({
+        userId: 'rafael@reactjs.client',
+        message: 'Olá :)',
+      }),
     );
   },
   console.error,

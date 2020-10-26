@@ -3,7 +3,6 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { Transport } from '@nestjs/microservices';
 import * as headers from 'fastify-helmet';
 import { AppModule } from './modules/app/app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -36,21 +35,6 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
     new FastifyAdapter({ logger: true }),
   );
 
-  app.connectMicroservice({
-    name: 'CHAT_MQ_SERVICE_PROVIDER',
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      // urls: [
-      //   'amqps://elqpxlad:jAgQ_Y2iuiR0HXlvF-RWcEXm7wSbPI8t@jackal.rmq.cloudamqp.com/elqpxlad',
-      // ],
-      queue: 'chats_queue',
-      queueOptions: {
-        durable: false,
-      },
-    },
-  });
-
   app.enableCors();
 
   const options = new DocumentBuilder()
@@ -79,6 +63,5 @@ export const SWAGGER_API_CURRENT_VERSION = '1.0';
   // });
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.startAllMicroservicesAsync();
   await app.listen(Number(process.env.PORT) || 9000, '0.0.0.0');
 })();
