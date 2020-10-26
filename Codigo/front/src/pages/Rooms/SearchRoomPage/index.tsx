@@ -29,7 +29,10 @@ const SearchRoomPage: React.FC = () => {
   }, []);
 
   const handleJoin = async (roomId: string): Promise<void> => {
-    await api.rooms.join(roomId).then(addRoom);
+    await api.rooms
+      .join(roomId)
+      .then(addRoom)
+      .then(() => history.push(`/app/rooms/${roomId}`));
   };
 
   return (

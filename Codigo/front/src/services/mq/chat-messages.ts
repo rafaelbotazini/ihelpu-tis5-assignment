@@ -23,5 +23,6 @@ export const subscribeToChatMessages = (
   return client.subscribe(
     '/exchange/chat_messages/send_text.' + roomId,
     callback,
+    { ack: 'client' },
   );
 };

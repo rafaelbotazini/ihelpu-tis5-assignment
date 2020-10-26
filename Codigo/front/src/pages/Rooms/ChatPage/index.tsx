@@ -1,13 +1,9 @@
-import { backgrounds } from 'polished';
 import React, { useContext, useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
-import {
-  ConnectionStatusContext,
-  useConnectionStatus,
-} from '../../../contexts/ConnectionStatusContext';
+import { ConnectionStatusContext } from '../../../contexts/ConnectionStatusContext';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { ChatMessagePayload } from '../../../models/ChatMessagePayload';
@@ -43,7 +39,10 @@ const ChatPage: React.FC = () => {
     if (connected) {
       const { unsubscribe } = mq.chatMessages.subscribeToChatMessages(
         id,
-        (msg) => setMessages((msgs) => msgs.concat([JSON.parse(msg.body)])),
+        (msg) => {
+          setMessages((msgs) => msgs.concat([JSON.parse(msg.body)]));
+          msg.ack();
+        },
       );
       return unsubscribe;
     }
@@ -51,7 +50,7 @@ const ChatPage: React.FC = () => {
 
   return (
     <Container>
-      {!connected && 'Connectando...'}
+      {!connected && 'Conectando...'}
       {connected && (
         <>
           <p>Chat ID: {id}</p>
