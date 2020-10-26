@@ -31,6 +31,7 @@ export class ConfigService {
           WEBTOKEN_SECRET_KEY: process.env.WEBTOKEN_SECRET_KEY,
           WEBTOKEN_EXPIRATION_TIME: process.env.WEBTOKEN_EXPIRATION_TIME,
           DB_URL: process.env.DB_URL,
+          RABBITMQ_URL: process.env.RABBITMQ_URL,
         };
 
     this.envConfig = ConfigService.validateInput(config);
@@ -54,6 +55,7 @@ export class ConfigService {
       WEBTOKEN_SECRET_KEY: joi.string().required(),
       WEBTOKEN_EXPIRATION_TIME: joi.number().default(1800),
       DB_URL: joi.string().regex(/^mongodb/),
+      RABBITMQ_URL: joi.string().required(),
     });
 
     /**

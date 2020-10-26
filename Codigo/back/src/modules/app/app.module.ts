@@ -12,6 +12,7 @@ import { WinstonModule } from '../winston/winston.module';
 import { AccessControlModule } from 'nest-access-control';
 import { roles } from './app.roles';
 import { RoomModule } from 'modules/room/room.module';
+import { ChatModule } from 'modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { RoomModule } from 'modules/room/room.module';
     AccessControlModule.forRoles(roles),
     ConfigModule,
     AuthModule,
+    ChatModule,
     ProfileModule,
     RoomModule,
   ],
