@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp';
 import PrivateRoute from './pages/PrivateRoute';
 import Layout from './components/Layout';
 import Rooms from './pages/Rooms';
+import Profile from './pages/Profile';
 
 import {
   CurrentUserContext,
@@ -49,6 +50,9 @@ const App: React.FC = () => {
                       </Route>
                       <Route path="/app/rooms">
                         <Rooms />
+                      </Route>
+                      <Route path="/app/profile">
+                        <Profile />
                       </Route>
                       <Route path="/app/*">404 Not found</Route>
                     </Switch>
