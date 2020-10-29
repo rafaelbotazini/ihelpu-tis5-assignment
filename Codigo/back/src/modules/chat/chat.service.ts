@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import {
+  AmqpConnection,
+  Nack,
+  RabbitSubscribe,
+} from '@golevelup/nestjs-rabbitmq';
 import { RmqMessage } from 'common/interfaces/RmqMessage';
 import { TextMessagePayload } from './payload/text-message.payload';
+import { RoomService } from 'modules/room/room.service';
+import { IMessage } from 'modules/message/message.model';
 
 @Injectable()
 export class ChatService {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(
+    private amqpConnection: AmqpConnection,
+    private roomService: RoomService,
+  ) {}
 
   /**
    * Sends a text message to a chat room
@@ -40,13 +49,22 @@ export class ChatService {
   public async handleChatMessage(
     payload: TextMessagePayload,
     message: RmqMessage,
-  ): Promise<void> {
+  ): Promise<Nack | undefined> {
     const { routingKey } = message.fields;
     const roomId = routingKey.substr(routingKey.indexOf('.') + 1);
 
-    // TODO: persist message to database
-    console.log(
-      ` [RMQ] ::::::: CHAT :: ${roomId} :: ${payload.userId} :: ${payload.message}`,
-    );
+    try {
+      // process message (add timestamp)
+      const textMessage: IMessage = {
+        text: payload.message,
+        from: payload.userId,
+        createdAt: new Date(),
+      };
+
+      // add to room messages
+      await this.roomService.addMessage(roomId, textMessage);
+    } catch {
+      return new Nack(true);
+    }
   }
 }

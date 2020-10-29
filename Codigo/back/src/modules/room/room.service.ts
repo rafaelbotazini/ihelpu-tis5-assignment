@@ -10,6 +10,7 @@ import { CreateRoomPayload } from './payload/CreateRoomPayload';
 import { EditRoomPayload } from './payload/EditRoomPayload';
 import { ProfileService } from 'modules/profile/profile.service';
 import { IProfile } from 'modules/profile/profile.model';
+import { IMessage } from 'modules/message/message.model';
 
 /**
  * Room Service
@@ -65,6 +66,12 @@ export class RoomService {
   async getRoomByUser(user: IProfile): Promise<IRoom[]> {
     await user.populate('groups').execPopulate();
     return user.groups;
+  }
+
+  async addMessage(roomId: string, message: IMessage): Promise<void> {
+    await this.roomModel.findByIdAndUpdate(roomId, {
+      $push: { messages: message },
+    });
   }
 
   async join(roomId: string, user: IProfile): Promise<IRoom> {

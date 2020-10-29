@@ -4,9 +4,11 @@ import { ChatService } from './chat.service';
 import { ChatController } from './chat.controller';
 import { ConfigModule } from 'modules/config/config.module';
 import { ConfigService } from 'modules/config/config.service';
+import { RoomModule } from 'modules/room/room.module';
 
 @Module({
   imports: [
+    RoomModule,
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
