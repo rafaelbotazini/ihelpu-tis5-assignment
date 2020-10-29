@@ -21,7 +21,7 @@ export const subscribeToChatMessages = (
   callback: (msg: Message) => void,
 ): Subscription => {
   return client.subscribe(
-    '/exchange/chat_messages/send_text.' + roomId,
+    '/exchange/chat_messages/message.' + roomId,
     callback,
     { ack: 'client' },
   );
