@@ -58,7 +58,11 @@ export class RoomService {
   }
 
   async getRoomById(id: string): Promise<IRoom> {
-    const room = await this.roomModel.findById(id).populate('admin');
+    const room = await this.roomModel
+      .findById(id)
+      .populate('admin', 'id name username avatar')
+      .populate('members', 'id name username avatar')
+      .exec();
     return room;
   }
 

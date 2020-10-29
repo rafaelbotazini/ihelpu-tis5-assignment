@@ -7,6 +7,7 @@ import { ConnectionStatusContext } from '../../../contexts/ConnectionStatusConte
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { ChatMessagePayload } from '../../../models/ChatMessagePayload';
+import { Room } from '../../../models/Room';
 import api from '../../../services/api';
 import mq from '../../../services/mq';
 import { Container } from './styles';
@@ -20,6 +21,7 @@ const ChatPage: React.FC = () => {
 
   const [messages, setMessages] = useState<ChatMessagePayload[]>([]);
   const [textMessage, setTextMessage] = useState('');
+  const [room, setRoom] = useState<Room>();
 
   const handleGroupUnsubscribe = (): void => {
     api.rooms.leave(id).then(() => {
@@ -36,6 +38,12 @@ const ChatPage: React.FC = () => {
   };
 
   useEffect(() => {
+    setMessages([]);
+    setRoom(undefined);
+    api.rooms.get(id).then(setRoom);
+  }, [id]);
+
+  useEffect(() => {
     if (connected) {
       const { unsubscribe } = mq.chatMessages.subscribeToChatMessages(
         id,
@@ -44,42 +52,36 @@ const ChatPage: React.FC = () => {
           msg.ack();
         },
       );
-      return () => {
-        setMessages([]);
-        unsubscribe();
-      };
+      return unsubscribe;
     }
   }, [connected, id]);
 
-  return (
+  return !room ? (
+    <div>Carregando os dados da sala...</div>
+  ) : !connected ? (
+    <div>Recebendo mensagens...</div>
+  ) : (
     <Container>
-      {!connected && 'Conectando...'}
-      {connected && (
-        <>
-          <p>Chat ID: {id}</p>
+      <h1>{room.name}</h1>
 
-          <div
-            style={{ marginBottom: 24, padding: 12, backgroundColor: '#000' }}
-          >
-            <pre>{JSON.stringify(messages, null, 2)}</pre>
-          </div>
+      <div style={{ marginBottom: 24, padding: 12, backgroundColor: '#000' }}>
+        <pre>{JSON.stringify(messages, null, 2)}</pre>
+      </div>
 
-          <div>
-            <Input
-              name="message"
-              value={textMessage}
-              onChange={(e) => setTextMessage(e.target.value)}
-              onKeyPress={handleKeypress}
-              placeholder="Digite sua mensagem"
-            />
-          </div>
+      <div>
+        <Input
+          name="message"
+          value={textMessage}
+          onChange={(e) => setTextMessage(e.target.value)}
+          onKeyPress={handleKeypress}
+          placeholder="Digite sua mensagem"
+        />
+      </div>
 
-          <Button onClick={handleGroupUnsubscribe}>
-            <FaTimes />
-            Sair do grupo
-          </Button>
-        </>
-      )}
+      <Button onClick={handleGroupUnsubscribe}>
+        <FaTimes />
+        Sair do grupo
+      </Button>
     </Container>
   );
 };
