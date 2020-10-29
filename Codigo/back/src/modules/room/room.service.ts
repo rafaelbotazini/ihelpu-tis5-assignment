@@ -57,6 +57,11 @@ export class RoomService {
     await this.roomModel.findByIdAndUpdate(id, payload);
   }
 
+  async getRoomsByName(name: string): Promise<IRoom[]>{
+    const room = await this.roomModel.find({ name: { $regex: this.replace(name), $options: 'i' }});
+    return room;
+  }
+
   async getRoomById(id: string): Promise<IRoom> {
     const room = await this.roomModel
       .findById(id)
@@ -127,5 +132,13 @@ export class RoomService {
 
   userIsAdmin(room: IRoom, user: IProfile): boolean {
     return user.id === room.admin.id;
+  }
+  
+  replace(query): string {
+    return query.replace(/a/g, '[a,á,à,ä]')
+       .replace(/e/g, '[e,é,ë]')
+       .replace(/i/g, '[i,í,ï]')
+       .replace(/o/g, '[o,ó,ö,ò]')
+       .replace(/u/g, '[u,ü,ú,ù]');
   }
 }

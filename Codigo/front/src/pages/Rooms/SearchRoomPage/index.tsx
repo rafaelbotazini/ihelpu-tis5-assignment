@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
@@ -6,6 +6,7 @@ import RoomCard from '../../../components/RoomCard';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
+import { searchRooms } from '../../../services/api/rooms';
 import {
   Container,
   ResultsContainer,
@@ -14,19 +15,37 @@ import {
   SearchInput,
   SearchStatus,
 } from './styles';
+import { useDebounce } from 'use-debounce';
 
 const SearchRoomPage: React.FC = () => {
   const history = useHistory();
   const { rooms, addRoom } = useContext(UserGroupsContext);
   const [results, setResults] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [query, setQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const debouncedSearchTerm = useDebounce(query, 500);
 
   useEffect(() => {
+    if (debouncedSearchTerm){
+      setIsSearching(true);
+      api.rooms.searchRooms(query).then(results => {
+        setIsSearching(false);
+        setResults(results);
+      })
+    } else {
     api.rooms
       .list()
       .then(setResults)
       .finally(() => setLoading(false));
+    }
   }, []);
+
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+    e.preventDefault();
+
+    await api.rooms.searchRooms(e.target.value).then(setResults);
+  }
 
   const handleJoin = async (roomId: string): Promise<void> => {
     await api.rooms
@@ -40,7 +59,7 @@ const SearchRoomPage: React.FC = () => {
       <SearchContainer>
         <h1>Pesquisar sala</h1>
         <SearchInputWrapper>
-          <SearchInput name="roomName" placeholder="Nome da sala ou assunto" />
+          <SearchInput name="roomName" placeholder="Nome da sala ou assunto" onChange={handleChange}/>
         </SearchInputWrapper>
       </SearchContainer>
       <ResultsContainer>
