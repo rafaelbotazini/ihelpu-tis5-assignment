@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { RmqMessage } from 'common/interfaces/RmqMessage';
 import { TextMessagePayload } from './payload/text-message.payload';
+import { MessageService } from 'modules/message/message.service';
 
 @Injectable()
 export class ChatService {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(
+    private amqpConnection: AmqpConnection,
+    private messageService: MessageService,
+  ) {}
 
   /**
    * Sends a text message to a chat room
@@ -39,14 +43,27 @@ export class ChatService {
   })
   public async handleChatMessage(
     payload: TextMessagePayload,
-    message: RmqMessage,
+    rmqMessage: RmqMessage,
   ): Promise<void> {
-    const { routingKey } = message.fields;
+    const { routingKey } = rmqMessage.fields;
     const roomId = routingKey.substr(routingKey.indexOf('.') + 1);
+    try {
+      console.log(roomId, payload);
+      // persist new message
+      const message = await this.messageService.addTextMessage(
+        roomId,
+        payload.userId,
+        payload.message.trim(),
+      );
 
-    // TODO: persist message to database
-    console.log(
-      ` [RMQ] ::::::: CHAT :: ${roomId} :: ${payload.userId} :: ${payload.message}`,
-    );
+      // publish message to subscribed clients
+      this.amqpConnection.publish(
+        'chat_messages',
+        'message.' + roomId,
+        message.toJSON(),
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
