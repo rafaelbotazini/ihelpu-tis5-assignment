@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  AmqpConnection,
-  Nack,
-  RabbitSubscribe,
-} from '@golevelup/nestjs-rabbitmq';
+import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { RmqMessage } from 'common/interfaces/RmqMessage';
 import { TextMessagePayload } from './payload/text-message.payload';
 import { MessageService } from 'modules/message/message.service';
