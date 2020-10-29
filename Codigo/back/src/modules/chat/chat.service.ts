@@ -63,6 +63,13 @@ export class ChatService {
 
       // add to room messages
       await this.roomService.addMessage(roomId, textMessage);
+
+      // publish processed message to subscribed clients
+      this.amqpConnection.publish(
+        'chat_messages',
+        'message.' + roomId,
+        textMessage,
+      );
     } catch {
       return new Nack(true);
     }
