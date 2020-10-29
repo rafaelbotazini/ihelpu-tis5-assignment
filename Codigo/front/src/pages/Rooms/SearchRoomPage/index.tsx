@@ -23,41 +23,22 @@ const SearchRoomPage: React.FC = () => {
   const [results, setResults] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [query, setQuery] = useState('');
-<<<<<<< Updated upstream
   const [isSearching, setIsSearching] = useState(false);
   const debouncedSearchTerm = useDebounce(query, 500);
-=======
->>>>>>> Stashed changes
 
   useEffect(() => {
-    if (debouncedSearchTerm){
-      setIsSearching(true);
-      api.rooms.searchRooms(query).then(results => {
-        setIsSearching(false);
-        setResults(results);
-      })
-    } else {
     api.rooms
       .list()
       .then(setResults)
       .finally(() => setLoading(false));
-    }
   }, []);
 
-<<<<<<< Updated upstream
   const handleChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     e.preventDefault();
 
-    await api.rooms.searchRooms(e.target.value).then(setResults);
+    await api.rooms.searchRooms(e.target.value).then(setResults)
+    .finally(() => setLoading(false));
   }
-=======
-  // const searchRoom = async (query: string): Promise<void> => {
-  //   await api.rooms
-  //     .join(roomId)
-  //     .then(addRoom)
-  //     .then(() => history.push(`/app/rooms/${roomId}`));
-  // };
->>>>>>> Stashed changes
 
   const handleJoin = async (roomId: string): Promise<void> => {
     await api.rooms
@@ -71,11 +52,7 @@ const SearchRoomPage: React.FC = () => {
       <SearchContainer>
         <h1>Pesquisar sala</h1>
         <SearchInputWrapper>
-<<<<<<< Updated upstream
           <SearchInput name="roomName" placeholder="Nome da sala ou assunto" onChange={handleChange}/>
-=======
-          <SearchInput name="roomName" placeholder="Nome da sala ou assunto" value="query" />
->>>>>>> Stashed changes
         </SearchInputWrapper>
       </SearchContainer>
       <ResultsContainer>

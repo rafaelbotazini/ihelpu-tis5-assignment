@@ -56,18 +56,7 @@ export class RoomService {
   async editRoom(id: string, payload: EditRoomPayload): Promise<void> {
     await this.roomModel.findByIdAndUpdate(id, payload);
   }
-
-<<<<<<< Updated upstream
-=======
-  replace(query) {
-    return query.replace(/a/g, '[a,á,à,ä]')
-       .replace(/e/g, '[e,é,ë]')
-       .replace(/i/g, '[i,í,ï]')
-       .replace(/o/g, '[o,ó,ö,ò]')
-       .replace(/u/g, '[u,ü,ú,ù]');
-}
   
->>>>>>> Stashed changes
   async getRoomsByName(name: string): Promise<IRoom[]>{
     const room = await this.roomModel.find({ name: { $regex: this.replace(name), $options: 'i' }});
     return room;
