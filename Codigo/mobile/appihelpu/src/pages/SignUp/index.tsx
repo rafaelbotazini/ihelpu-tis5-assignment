@@ -46,6 +46,10 @@ const SignUp: React.FC = () => {
   const usernameInputRef = useRef<TextInput>(null);
   const universityInputRef = useRef<TextInput>(null);
 
+  const handleGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   const handleSignUp = useCallback(
     async (data: SignUpPayload) => {
       try {
@@ -184,7 +188,7 @@ const SignUp: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <BackToSignIn onPress={() => navigation.goBack()}>
+      <BackToSignIn onPress={handleGoBack}>
         <Icon name="arrow-left" size={20} color="#fff" />
         <BackToSignInText>Voltar para logon</BackToSignInText>
       </BackToSignIn>

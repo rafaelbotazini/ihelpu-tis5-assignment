@@ -47,6 +47,14 @@ const SignIn: React.FC = () => {
 
   const currentUser = useAuth();
 
+  const handleGoForgotPassword = useCallback(() => {
+    navigation.navigate('ForgotPassword');
+  }, [navigation]);
+
+  const handleGoSignUp = useCallback(() => {
+    navigation.navigate('SignUp');
+  }, [navigation]);
+
   // recuperar os dados que estão sendo passados no form
   const handleSignIn = useCallback(
     async (data: Credentials) => {
@@ -138,18 +146,14 @@ const SignIn: React.FC = () => {
               </Button>
             </Form>
 
-            <ForgotPassword
-              onPress={() => {
-                console.log('esqueci');
-              }}
-            >
+            <ForgotPassword onPress={handleGoForgotPassword}>
               <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
             </ForgotPassword>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
+      <CreateAccountButton onPress={handleGoSignUp}>
         <Icon name="log-in" size={20} color="#ff9000" />
         <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
       </CreateAccountButton>
