@@ -1,7 +1,6 @@
 import { Schema, Document } from 'mongoose';
 import { DefaultSchema } from 'common/schemas/default.schema';
 import { IProfile } from 'modules/profile/profile.model';
-import { IMessage } from 'modules/message/message.model';
 
 /**
  * Mongoose Room Schema
@@ -10,13 +9,6 @@ export const Room = new DefaultSchema({
   name: { type: String, required: true },
   admin: { type: Schema.Types.ObjectId, ref: 'Profile' },
   members: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
-  messages: [
-    {
-      text: String,
-      from: { type: Schema.Types.ObjectId, ref: 'Profile' },
-      createdAt: Date,
-    },
-  ],
   avatar: { type: String },
 });
 
@@ -49,8 +41,4 @@ export interface IRoom extends Document {
    * Last update
    */
   readonly updatedAt: Date;
-  /**
-   * Message list
-   */
-  readonly messages: IMessage[];
 }

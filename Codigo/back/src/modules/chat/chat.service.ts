@@ -6,14 +6,13 @@ import {
 } from '@golevelup/nestjs-rabbitmq';
 import { RmqMessage } from 'common/interfaces/RmqMessage';
 import { TextMessagePayload } from './payload/text-message.payload';
-import { RoomService } from 'modules/room/room.service';
-import { IMessage } from 'modules/message/message.model';
+import { MessageService } from 'modules/message/message.service';
 
 @Injectable()
 export class ChatService {
   constructor(
     private amqpConnection: AmqpConnection,
-    private roomService: RoomService,
+    private messageService: MessageService,
   ) {}
 
   /**
@@ -48,30 +47,27 @@ export class ChatService {
   })
   public async handleChatMessage(
     payload: TextMessagePayload,
-    message: RmqMessage,
-  ): Promise<Nack | undefined> {
-    const { routingKey } = message.fields;
+    rmqMessage: RmqMessage,
+  ): Promise<void> {
+    const { routingKey } = rmqMessage.fields;
     const roomId = routingKey.substr(routingKey.indexOf('.') + 1);
-
     try {
-      // process message (add timestamp)
-      const textMessage: IMessage = {
-        text: payload.message,
-        from: payload.userId,
-        createdAt: new Date(),
-      };
+      console.log(roomId, payload);
+      // persist new message
+      const message = await this.messageService.addTextMessage(
+        roomId,
+        payload.userId,
+        payload.message.trim(),
+      );
 
-      // add to room messages
-      await this.roomService.addMessage(roomId, textMessage);
-
-      // publish processed message to subscribed clients
+      // publish message to subscribed clients
       this.amqpConnection.publish(
         'chat_messages',
         'message.' + roomId,
-        textMessage,
+        message.toJSON(),
       );
-    } catch {
-      return new Nack(true);
+    } catch (error) {
+      console.log(error);
     }
   }
 }
