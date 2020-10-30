@@ -15,16 +15,12 @@ import {
   SearchInput,
   SearchStatus,
 } from './styles';
-import { useDebounce } from 'use-debounce';
 
 const SearchRoomPage: React.FC = () => {
   const history = useHistory();
   const { rooms, addRoom } = useContext(UserGroupsContext);
   const [results, setResults] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [query, setQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
-  const debouncedSearchTerm = useDebounce(query, 500);
 
   useEffect(() => {
     api.rooms
