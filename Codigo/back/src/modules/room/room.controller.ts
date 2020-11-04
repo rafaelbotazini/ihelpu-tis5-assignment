@@ -44,6 +44,11 @@ export class RoomControler {
     return await this.roomService.getRoomById(id);
   }
 
+  @Get('search/:query')
+  async searchRooms(@Param('query') query: string): Promise<IRoom[]> {
+    return await this.roomService.getRoomsByName(query);
+  }
+
   @Post()
   @UseGuards(AuthGuard('jwt'))
   async createRoom(
