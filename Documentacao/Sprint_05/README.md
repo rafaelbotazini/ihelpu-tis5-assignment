@@ -1,5 +1,5 @@
 
-# SPRINT 03
+# SPRINT 05
 
 > Na Sprint 03 foram desenvolvidos os seguintes documentos: 
   - Documento de Arquitetura de Software - Diagramas UML 
