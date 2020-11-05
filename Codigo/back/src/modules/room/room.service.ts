@@ -1,10 +1,6 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IRoom } from './room.model';
 import { CreateRoomPayload } from './payload/CreateRoomPayload';
 import { EditRoomPayload } from './payload/EditRoomPayload';
@@ -113,14 +109,21 @@ export class RoomService {
       throw new NotFoundException(`The room with id  ${roomId} was not found`);
     }
 
-    if (this.userIsAdmin(room, user)) {
-      throw new BadRequestException('O administrador não pode sair da sala.');
-    }
-
     // remove user from room
-    await this.roomModel.findByIdAndUpdate(room.id, {
-      $pullAll: { members: [user] },
-    });
+    if (this.userIsAdmin(room, user)) {
+      if (room.members.length >= 2) {
+        await this.roomModel.findByIdAndUpdate(room.id, {
+          $pullAll: { members: [user] },
+          admin: room.members[1],
+        });
+      } else {
+        await this.roomModel.findByIdAndRemove(roomId);
+      }
+    } else {
+      await this.roomModel.findByIdAndUpdate(room.id, {
+        $pullAll: { members: [user] },
+      });
+    }
 
     // remove room from user
     await this.profileService.leaveRoom(user, room);
