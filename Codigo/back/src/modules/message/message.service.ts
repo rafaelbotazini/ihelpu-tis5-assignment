@@ -14,4 +14,8 @@ export class MessageService {
   ): Promise<IMessage> {
     return await this.messageModel.create({ roomId, fromId, text });
   }
+
+  async getMessagesByRoom(roomId: string): Promise<IMessage[]> {
+    return await this.messageModel.find({'roomId': roomId}).populate('messages');
+  }
 }
