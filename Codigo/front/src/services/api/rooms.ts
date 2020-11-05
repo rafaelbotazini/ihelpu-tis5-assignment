@@ -19,5 +19,5 @@ export const join = (roomId: string): Promise<Room> =>
 export const leave = (roomId: string): Promise<void> =>
   apiRequest.post(`/room/${roomId}/leave`);
 
-export const searchRooms = (query: string): Promise<Room[]> => 
-  apiRequest.get('/room/search/' + query).then(({data}) => data);
+export const searchRooms = (query: string): Promise<Room[]> =>
+  apiRequest.get('/room/search/' + query).then(({ data }) => data);

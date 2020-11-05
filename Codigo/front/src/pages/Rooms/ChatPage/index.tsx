@@ -76,9 +76,7 @@ const ChatPage: React.FC = () => {
           </OptionLink>
         )}
 
-        {user?.id !== room.admin?.id && (
-          <OptionLink onClick={handleGroupUnsubscribe}>Sair</OptionLink>
-        )}
+        <OptionLink onClick={handleGroupUnsubscribe}>Sair</OptionLink>
       </OptionsBar>
       <Container>
         <h1>{room.name}</h1>

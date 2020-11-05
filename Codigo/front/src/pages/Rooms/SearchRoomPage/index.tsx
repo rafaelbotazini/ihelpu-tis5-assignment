@@ -1,4 +1,10 @@
-import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
@@ -29,12 +35,16 @@ const SearchRoomPage: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+  const handleChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
     e.preventDefault();
 
-    await api.rooms.searchRooms(e.target.value).then(setResults)
-    .finally(() => setLoading(false));
-  }
+    await api.rooms
+      .searchRooms(e.target.value)
+      .then(setResults)
+      .finally(() => setLoading(false));
+  };
 
   const handleJoin = async (roomId: string): Promise<void> => {
     await api.rooms
@@ -48,7 +58,11 @@ const SearchRoomPage: React.FC = () => {
       <SearchContainer>
         <h1>Pesquisar sala</h1>
         <SearchInputWrapper>
-          <SearchInput name="roomName" placeholder="Nome da sala ou assunto" onChange={handleChange}/>
+          <SearchInput
+            name="roomName"
+            placeholder="Nome da sala ou assunto"
+            onChange={handleChange}
+          />
         </SearchInputWrapper>
       </SearchContainer>
       <ResultsContainer>
