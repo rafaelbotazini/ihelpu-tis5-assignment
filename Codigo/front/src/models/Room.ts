@@ -5,5 +5,5 @@ export interface Room {
   admin?: Profile;
   name: string;
   avatar: string;
-  members?: string[];
+  members: Profile[] | string[];
 }

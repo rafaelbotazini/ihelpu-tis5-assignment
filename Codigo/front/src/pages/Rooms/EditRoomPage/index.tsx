@@ -22,12 +22,8 @@ const EditRoomPage: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<PageParams>();
   const { updateRoom } = useContext(UserGroupsContext);
-
-  const [room, setRoom] = useState<Room>({
-    id: '',
-    name: '',
-    avatar: '',
-  });
+  const [room, setRoom] = useState<Room>({} as Room);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void =>
     setRoom({ ...room, name: e.target.value });
@@ -38,13 +34,21 @@ const EditRoomPage: React.FC = () => {
     if (!room.name) return;
     api.rooms.edit(room).then(() => {
       updateRoom(room);
-      history.push('/app/rooms');
+      history.push('/app/rooms/' + id);
     });
   };
 
   useEffect(() => {
-    api.rooms.get(id).then((r) => setRoom(r));
+    setLoading(true);
+    api.rooms
+      .get(id)
+      .then((r) => setRoom(r))
+      .finally(() => setLoading(false));
   }, [id]);
+
+  if (loading) {
+    return <Container>Aguarde...</Container>;
+  }
 
   return (
     <Container>

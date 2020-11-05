@@ -9,10 +9,12 @@ import api from '../../services/api';
 import { logout } from '../../services/auth';
 import { UserGroupsContext } from '../../contexts/UserGroupsContext';
 import { Room } from '../../models/Room';
+import { ConnectionStatusContext } from '../../contexts/ConnectionStatusContext';
 
 const Layout: React.FC = ({ children }) => {
   const currentUser = useContext(CurrentUserContext);
   const userGroups = useContext(UserGroupsContext);
+  const { connected } = useContext(ConnectionStatusContext);
 
   useEffect(() => {
     if (!currentUser.user) {
@@ -56,7 +58,7 @@ const Layout: React.FC = ({ children }) => {
             />
           </BottomMenu>
         </Sider>
-        <Content>{children}</Content>
+        <Content>{connected ? children : 'Conectando...'}</Content>
       </ContentWrapper>
     </Wrapper>
   );

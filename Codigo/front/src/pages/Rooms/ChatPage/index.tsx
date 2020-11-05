@@ -1,27 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaPaperPlane } from 'react-icons/fa';
 import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
-import { ConnectionStatusContext } from '../../../contexts/ConnectionStatusContext';
+import MessageBoard from '../../../components/MessageBoard';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
-import { ChatMessagePayload } from '../../../models/ChatMessagePayload';
+import { ChatMessage } from '../../../models/ChatMessage';
+import { Profile } from '../../../models/Profile';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
 import mq from '../../../services/mq';
-import { Container } from './styles';
+import { Wrapper, Container, OptionsBar, OptionLink } from './styles';
 
 const ChatPage: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { user } = useContext(CurrentUserContext);
   const { removeRoom } = useContext(UserGroupsContext);
-  const { connected } = useContext(ConnectionStatusContext);
 
-  const [messages, setMessages] = useState<ChatMessagePayload[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [textMessage, setTextMessage] = useState('');
-  const [room, setRoom] = useState<Room>();
+  const [room, setRoom] = useState<Room>({} as Room);
 
   const handleGroupUnsubscribe = (): void => {
     api.rooms.leave(id).then(() => {
@@ -38,51 +39,74 @@ const ChatPage: React.FC = () => {
   };
 
   useEffect(() => {
-    setMessages([]);
-    setRoom(undefined);
-    api.rooms.get(id).then(setRoom);
+    // fetch room
+    setLoading(true);
+    api.rooms
+      .get(id)
+      .then(setRoom)
+      .finally(() => setLoading(false));
+
+    // receive messages
+    const { unsubscribe } = mq.chatMessages.subscribeToChatMessages(
+      id,
+      (msg) => {
+        setMessages((msgs) => msgs.concat([JSON.parse(msg.body)]));
+        msg.ack();
+      },
+    );
+
+    // TODO: get older messages
+    return unsubscribe;
   }, [id]);
 
-  useEffect(() => {
-    if (connected) {
-      const { unsubscribe } = mq.chatMessages.subscribeToChatMessages(
-        id,
-        (msg) => {
-          setMessages((msgs) => msgs.concat([JSON.parse(msg.body)]));
-          msg.ack();
-        },
-      );
-      return unsubscribe;
-    }
-  }, [connected, id]);
+  if (loading) {
+    return <Container>Carregando os dados da sala...</Container>;
+  }
 
-  return !room ? (
-    <div>Carregando os dados da sala...</div>
-  ) : !connected ? (
-    <div>Recebendo mensagens...</div>
-  ) : (
-    <Container>
-      <h1>{room.name}</h1>
+  if (!room || !room.id) {
+    return <Container>Sala não encontrada</Container>;
+  }
 
-      <div style={{ marginBottom: 24, padding: 12, backgroundColor: '#000' }}>
-        <pre>{JSON.stringify(messages, null, 2)}</pre>
-      </div>
+  return (
+    <Wrapper>
+      <OptionsBar>
+        {user?.id === room.admin?.id && (
+          <OptionLink onClick={() => history.push('edit/' + id)}>
+            Editar
+          </OptionLink>
+        )}
 
-      <div>
-        <Input
-          name="message"
-          value={textMessage}
-          onChange={(e) => setTextMessage(e.target.value)}
-          onKeyPress={handleKeypress}
-          placeholder="Digite sua mensagem"
+        {user?.id !== room.admin?.id && (
+          <OptionLink onClick={handleGroupUnsubscribe}>Sair</OptionLink>
+        )}
+      </OptionsBar>
+      <Container>
+        <h1>{room.name}</h1>
+
+        <MessageBoard
+          messages={messages}
+          currentUser={user as Profile}
+          members={room.members as Profile[]}
+          admin={room.admin as Profile}
         />
-      </div>
 
-      <Button onClick={handleGroupUnsubscribe}>
-        <FaTimes />
-        Sair do grupo
-      </Button>
-    </Container>
+        <div style={{ display: 'flex' }}>
+          <div style={{ marginRight: 8, width: '100%' }}>
+            <Input
+              autoComplete="off"
+              name="message"
+              value={textMessage}
+              onChange={(e) => setTextMessage(e.target.value)}
+              onKeyPress={handleKeypress}
+              placeholder="Digite sua mensagem"
+            />
+          </div>
+          <Button style={{ width: 'auto', margin: 0 }}>
+            <FaPaperPlane />
+          </Button>
+        </div>
+      </Container>
+    </Wrapper>
   );
 };
 
