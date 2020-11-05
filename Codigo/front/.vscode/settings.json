@@ -9,5 +9,6 @@
     "[typescriptreact]": {
         "editor.tabSize": 2,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    }
+    },
+    "files.eol": "\n"
 }
