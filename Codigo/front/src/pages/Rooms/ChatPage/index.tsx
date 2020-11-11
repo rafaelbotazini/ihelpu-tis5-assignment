@@ -30,6 +30,7 @@ const ChatPage: React.FC = () => {
       history.push('/');
     });
   };
+  
 
   const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter' && user && textMessage) {
@@ -43,9 +44,10 @@ const ChatPage: React.FC = () => {
     setLoading(true);
     api.rooms
       .get(id)
-      .then(setRoom)
-      .finally(() => setLoading(false));
+      .then(setRoom);
 
+    api.message.getMessagesByRoom(id).then(setMessages).finally(() => setLoading(false));
+    
     // receive messages
     const { unsubscribe } = mq.chatMessages.subscribeToChatMessages(
       id,
@@ -58,6 +60,8 @@ const ChatPage: React.FC = () => {
     // TODO: get older messages
     return unsubscribe;
   }, [id]);
+
+  
 
   if (loading) {
     return <Container>Carregando os dados da sala...</Container>;
