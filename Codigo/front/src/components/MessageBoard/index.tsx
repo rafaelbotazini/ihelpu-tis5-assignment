@@ -2,13 +2,19 @@ import React, { useEffect, useRef } from 'react';
 import { ChatMessage } from '../../models/ChatMessage';
 import { Profile } from '../../models/Profile';
 import MessagePill from '../MessagePill';
-import { BoardWrapper, Board, MessagesWrapper } from './styles';
+import {
+  BoardWrapper,
+  Board,
+  MessagesWrapper,
+  LoadMessagesButton,
+} from './styles';
 
 type MessageBoardProps = {
   messages: ChatMessage[];
   currentUser: Profile;
   admin: Profile;
   members: Profile[];
+  onLoadMessagesClick: () => void;
 };
 
 const MessageBoard: React.FC<MessageBoardProps> = ({
@@ -16,6 +22,7 @@ const MessageBoard: React.FC<MessageBoardProps> = ({
   members,
   currentUser,
   admin,
+  onLoadMessagesClick,
 }) => {
   const bottom = useRef<HTMLDivElement>(null);
 
@@ -29,6 +36,9 @@ const MessageBoard: React.FC<MessageBoardProps> = ({
     <BoardWrapper>
       <Board>
         <MessagesWrapper>
+          <LoadMessagesButton onClick={onLoadMessagesClick}>
+            Carregar mensagens anteriores
+          </LoadMessagesButton>
           {messages.map((message) => {
             const user = members.find(
               (u) => u.id === message.fromId,
