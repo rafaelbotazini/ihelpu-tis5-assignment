@@ -38,6 +38,14 @@ const ChatPage: React.FC = () => {
     }
   };
 
+  const loadOlderMessages = (): void => {
+    const request: Promise<ChatMessage[]> = messages.length
+      ? api.message.getMessagesBefore(id, messages[0].createdAt)
+      : api.message.getMessagesByRoom(id);
+
+    request.then((items) => setMessages((m) => m.concat(items)));
+  };
+
   useEffect(() => {
     // fetch room
     setLoading(true);
@@ -86,6 +94,7 @@ const ChatPage: React.FC = () => {
           currentUser={user as Profile}
           members={room.members as Profile[]}
           admin={room.admin as Profile}
+          onLoadMessagesClick={loadOlderMessages}
         />
 
         <div style={{ display: 'flex' }}>

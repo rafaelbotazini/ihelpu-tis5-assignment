@@ -46,7 +46,9 @@ export class RoomService {
    * Fetch all rooms
    */
   async listRooms(): Promise<IRoom[]> {
-    return await this.roomModel.find({}).populate('admin');
+    return await this.roomModel
+      .find({})
+      .populate('admin', 'username university');
   }
 
   async editRoom(id: string, payload: EditRoomPayload): Promise<void> {
@@ -95,8 +97,6 @@ export class RoomService {
 
     await user.save();
     await room.save();
-
-    return room;
   }
 
   async leave(roomId: string, user: IProfile): Promise<void> {
@@ -108,6 +108,9 @@ export class RoomService {
     if (!room) {
       throw new NotFoundException(`The room with id  ${roomId} was not found`);
     }
+
+    // remove room from user
+    await this.profileService.leaveRoom(user, room);
 
     // remove user from room
     if (this.userIsAdmin(room, user)) {
@@ -124,9 +127,6 @@ export class RoomService {
         $pullAll: { members: [user] },
       });
     }
-
-    // remove room from user
-    await this.profileService.leaveRoom(user, room);
   }
 
   userIsMember(room: IRoom, user: IProfile): boolean {
