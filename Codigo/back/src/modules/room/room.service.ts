@@ -1,17 +1,11 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { IRoom } from './room.model';
 import { CreateRoomPayload } from './payload/CreateRoomPayload';
 import { EditRoomPayload } from './payload/EditRoomPayload';
 import { ProfileService } from 'modules/profile/profile.service';
 import { IProfile } from 'modules/profile/profile.model';
-import { MessageService } from 'modules/message/message.service';
-import { IMessage } from 'modules/message/message.model';
 
 /**
  * Room Service
@@ -21,7 +15,6 @@ export class RoomService {
   constructor(
     @InjectModel('Room') private readonly roomModel: Model<IRoom>,
     private readonly profileService: ProfileService,
-    private readonly messageService: MessageService
   ) {}
 
   /**
@@ -53,7 +46,9 @@ export class RoomService {
    * Fetch all rooms
    */
   async listRooms(): Promise<IRoom[]> {
-    return await this.roomModel.find({}).populate('admin');
+    return await this.roomModel
+      .find({})
+      .populate('admin', 'username university');
   }
 
   async editRoom(id: string, payload: EditRoomPayload): Promise<void> {
@@ -114,17 +109,24 @@ export class RoomService {
       throw new NotFoundException(`The room with id  ${roomId} was not found`);
     }
 
-    if (this.userIsAdmin(room, user)) {
-      throw new BadRequestException('O administrador não pode sair da sala.');
-    }
-
-    // remove user from room
-    await this.roomModel.findByIdAndUpdate(room.id, {
-      $pullAll: { members: [user] },
-    });
-
     // remove room from user
     await this.profileService.leaveRoom(user, room);
+
+    // remove user from room
+    if (this.userIsAdmin(room, user)) {
+      if (room.members.length >= 2) {
+        await this.roomModel.findByIdAndUpdate(room.id, {
+          $pullAll: { members: [user] },
+          admin: room.members[1],
+        });
+      } else {
+        await this.roomModel.findByIdAndRemove(roomId);
+      }
+    } else {
+      await this.roomModel.findByIdAndUpdate(room.id, {
+        $pullAll: { members: [user] },
+      });
+    }
   }
 
   userIsMember(room: IRoom, user: IProfile): boolean {
