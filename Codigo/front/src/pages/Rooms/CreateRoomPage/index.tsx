@@ -1,14 +1,15 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { FiEdit3, FiSave } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import { Container } from '../../../components/Layout/styles';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import api from '../../../services/api';
+import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 
 const CreateRoomPage: React.FC = () => {
+  const { addRoom } = useContext(UserGroupsContext);
   const history = useHistory();
-
   const [name, setName] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void =>
@@ -18,9 +19,11 @@ const CreateRoomPage: React.FC = () => {
     e.preventDefault();
 
     if (!name) return;
-    // TODO: send to actual room
 
-    api.rooms.create(name).then(() => history.push('/app/rooms'));
+    api.rooms.create(name).then((room) => {
+      addRoom(room);
+      history.push('/app/rooms');
+    });
   };
 
   return (

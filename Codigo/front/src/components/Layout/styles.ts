@@ -18,6 +18,11 @@ export const Sider = styled.div`
   flex-direction: column;
   width: 320px;
   background-color: ${colors.dark};
+
+  @media screen and (max-width: 992px) {
+    max-width: 64px;
+    overflow-x: hidden;
+  }
 `;
 
 export const BottomMenu = styled.div`
@@ -26,6 +31,10 @@ export const BottomMenu = styled.div`
   margin-top: auto;
   padding: 20px 15px;
   background-color: ${colors.darker};
+
+  @media screen and (max-width: 992px) {
+    flex-flow: row wrap;
+  }
 `;
 
 export const Content = styled.div`

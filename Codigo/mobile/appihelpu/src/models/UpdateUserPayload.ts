@@ -1,7 +1,6 @@
-export interface SignUpForm {
+export interface UpdateUserPayload {
   name: string;
   username: string;
   university: string;
   email: string;
-  password: string;
 }

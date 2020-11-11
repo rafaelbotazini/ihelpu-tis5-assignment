@@ -3,7 +3,7 @@ import * as rotateFile from 'winston-daily-rotate-file';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MongooseModule, MongooseModuleAsyncOptions } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '../config/config.module';
 import { ConfigService } from '../config/config.service';
 import { AuthModule } from '../auth/auth.module';
@@ -12,18 +12,20 @@ import { WinstonModule } from '../winston/winston.module';
 import { AccessControlModule } from 'nest-access-control';
 import { roles } from './app.roles';
 import { RoomModule } from 'modules/room/room.module';
+import { ChatModule } from 'modules/chat/chat.module';
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        ({
-          uri: configService.get('DB_URL'),
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        } as MongooseModuleAsyncOptions),
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get('DB_URL'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
+      }),
     }),
     WinstonModule.forRootAsync({
       imports: [ConfigModule],
@@ -66,6 +68,7 @@ import { RoomModule } from 'modules/room/room.module';
     AccessControlModule.forRoles(roles),
     ConfigModule,
     AuthModule,
+    ChatModule,
     ProfileModule,
     RoomModule,
   ],

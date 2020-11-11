@@ -11,7 +11,6 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Content } from './styles';
-import { useCurrentUser } from '../../contexts/currentUser';
 import api from '../../services/api';
 
 type LocationState = {
@@ -21,7 +20,6 @@ type LocationState = {
 };
 
 const SignIn: React.FC = () => {
-  const currentUser = useCurrentUser();
   const history = useHistory<{ pathname: string }>();
   const location = useLocation<LocationState>();
 
@@ -43,7 +41,6 @@ const SignIn: React.FC = () => {
         login(res.data.token);
       })
       .then(api.profile.getCurrent)
-      .then(currentUser.setUser)
       .then(() => {
         const { from } = location.state || { from: { pathname: '/' } };
         history.push(from);
@@ -79,7 +76,7 @@ const SignIn: React.FC = () => {
 
           <Button type="submit">Entrar</Button>
 
-          <Link to="forgot">Esqueci minha senha</Link>
+          <Link to="/forgotpassword">Esqueci minha senha</Link>
         </form>
 
         <Link to="signup">

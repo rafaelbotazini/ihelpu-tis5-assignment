@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import jwt from 'jwt-decode';
 
-export const TOKEN_KEY = '@iHelpU-Token';
+export const TOKEN_KEY = '@iHelpU:Token';
 
 type Token = {
   exp: number;
@@ -20,8 +20,10 @@ export const isAuthenticated = async (): Promise<boolean> => {
   return false;
 };
 
-export const getToken = (): Promise<string | null> =>
-  AsyncStorage.getItem(TOKEN_KEY);
+export const getToken = async (): Promise<string | null> => {
+  const [token] = await AsyncStorage.multiGet([TOKEN_KEY]);
+  return token[1];
+};
 
 export const login = (token: string): Promise<void> =>
   AsyncStorage.setItem(TOKEN_KEY, token);

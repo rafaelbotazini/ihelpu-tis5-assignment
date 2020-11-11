@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useCurrentUser } from '../../contexts/currentUser';
-import { Room } from '../../models/Room';
 import { colors } from '../../styles/themes';
 import RoomAvatar from '../RoomAvatar';
 
@@ -13,11 +11,10 @@ import {
   FlexDiv,
   SideMenuMessage,
 } from './styles';
+import { UserGroupsContext } from '../../contexts/UserGroupsContext';
 
 const SideBarMenu: React.FC = () => {
-  const { user } = useCurrentUser();
-
-  const rooms = (user ? user.groups : []) as Room[];
+  const { rooms } = useContext(UserGroupsContext);
 
   return (
     <SideMenu>

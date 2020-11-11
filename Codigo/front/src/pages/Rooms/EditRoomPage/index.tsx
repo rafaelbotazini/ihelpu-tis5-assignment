@@ -1,4 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { FiEdit3, FiSave } from 'react-icons/fi';
 import { useHistory, useParams } from 'react-router-dom';
 import { Container } from '../../../components/Layout/styles';
@@ -6,6 +12,7 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import api from '../../../services/api';
 import { Room } from '../../../models/Room';
+import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 
 type PageParams = {
   id: string;
@@ -13,14 +20,10 @@ type PageParams = {
 
 const EditRoomPage: React.FC = () => {
   const history = useHistory();
-
   const { id } = useParams<PageParams>();
-
-  const [room, setRoom] = useState<Room>({
-    id: '',
-    name: '',
-    avatar: '',
-  });
+  const { updateRoom } = useContext(UserGroupsContext);
+  const [room, setRoom] = useState<Room>({} as Room);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void =>
     setRoom({ ...room, name: e.target.value });
@@ -29,12 +32,23 @@ const EditRoomPage: React.FC = () => {
     e.preventDefault();
 
     if (!room.name) return;
-    api.rooms.edit(room).then(() => history.push('/app/rooms'));
+    api.rooms.edit(room).then(() => {
+      updateRoom(room);
+      history.push('/app/rooms/' + id);
+    });
   };
 
   useEffect(() => {
-    api.rooms.get(id).then((r) => setRoom(r));
+    setLoading(true);
+    api.rooms
+      .get(id)
+      .then((r) => setRoom(r))
+      .finally(() => setLoading(false));
   }, [id]);
+
+  if (loading) {
+    return <Container>Aguarde...</Container>;
+  }
 
   return (
     <Container>

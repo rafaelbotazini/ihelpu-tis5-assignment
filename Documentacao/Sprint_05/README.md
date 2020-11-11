@@ -1,4 +1,3 @@
-
 # SPRINT 05
 
 > Na Sprint 05 foram desenvolvidos os seguintes documentos: 

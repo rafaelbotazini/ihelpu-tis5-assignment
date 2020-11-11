@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Credentials } from '../../models/Credentials';
-import { SignUpForm } from '../../models/SignUpForm';
+import { SignUpPayload } from '../../models/SignUpPayload';
 import apiRequest from '../apiRequest';
 
 interface AuthResponse {
@@ -13,6 +13,8 @@ export const signIn = (
   apiRequest.post('/auth/login', credentials);
 
 export const signUp = (
-  user: SignUpForm,
+  user: SignUpPayload,
 ): Promise<AxiosResponse<AuthResponse>> =>
   apiRequest.post('/auth/register', user);
+
+export default { signIn, signUp };

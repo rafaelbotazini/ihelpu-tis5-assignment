@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
 import RoomCard from '../../../components/RoomCard';
-import { useCurrentUser } from '../../../contexts/currentUser';
+import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
+import { searchRooms } from '../../../services/api/rooms';
 import {
   Container,
   ResultsContainer,
@@ -15,7 +23,8 @@ import {
 } from './styles';
 
 const SearchRoomPage: React.FC = () => {
-  const { setUser } = useCurrentUser();
+  const history = useHistory();
+  const { rooms, addRoom } = useContext(UserGroupsContext);
   const [results, setResults] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -26,16 +35,22 @@ const SearchRoomPage: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+
+    await api.rooms
+      .searchRooms(e.target.value)
+      .then(setResults)
+      .finally(() => setLoading(false));
+  };
+
   const handleJoin = async (roomId: string): Promise<void> => {
-    await api.rooms.join(roomId).then((room) => {
-      if (room) {
-        setUser((user) => {
-          if (!user) return user;
-          const groups = (user.groups as Room[]).concat([room]);
-          return { ...user, groups };
-        });
-      }
-    });
+    await api.rooms
+      .join(roomId)
+      .then(addRoom)
+      .then(() => history.push(`/app/rooms/${roomId}`));
   };
 
   return (
@@ -43,7 +58,11 @@ const SearchRoomPage: React.FC = () => {
       <SearchContainer>
         <h1>Pesquisar sala</h1>
         <SearchInputWrapper>
-          <SearchInput name="roomName" placeholder="Nome da sala ou assunto" />
+          <SearchInput
+            name="roomName"
+            placeholder="Nome da sala ou assunto"
+            onChange={handleChange}
+          />
         </SearchInputWrapper>
       </SearchContainer>
       <ResultsContainer>
@@ -58,11 +77,19 @@ const SearchRoomPage: React.FC = () => {
               <RoomCard
                 key={room.id}
                 room={room}
-                renderActions={() => (
-                  <Button onClick={() => handleJoin(room.id)}>
-                    Participar
-                  </Button>
-                )}
+                renderActions={() =>
+                  rooms.some((r) => r.id === room.id) ? (
+                    <Button
+                      onClick={() => history.push(`/app/rooms/${room.id}`)}
+                    >
+                      Entrar
+                    </Button>
+                  ) : (
+                    <Button onClick={() => handleJoin(room.id)}>
+                      Participar
+                    </Button>
+                  )
+                }
               />
             ))}
         </CardList>
