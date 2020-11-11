@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
@@ -12,7 +6,6 @@ import RoomCard from '../../../components/RoomCard';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
-import { searchRooms } from '../../../services/api/rooms';
 import {
   Container,
   ResultsContainer,
