@@ -4,7 +4,7 @@ import { DefaultSchema } from 'common/schemas/default.schema';
 import { IRoom } from 'modules/room/room.model';
 
 export const Message = new DefaultSchema({
-  roomId: { type: String, required: true },
+  roomId: { type: Schema.Types.ObjectId, required: true },
   fromId: { type: Schema.Types.ObjectId, required: true },
   text: { type: String, required: true },
 });

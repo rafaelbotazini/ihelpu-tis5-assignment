@@ -1,10 +1,5 @@
-import {
-  BadRequestException,
-  Controller, Get, Param, UseGuards,
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IProfile } from 'modules/profile/profile.model';
 import { IMessage } from './message.model';
 import { MessageService } from './message.service';
 
@@ -15,7 +10,7 @@ import { MessageService } from './message.service';
 @ApiTags('message')
 @Controller('api/message')
 export class MessageController {
- /**
+  /**
    * Constructor
    * @param messageService
    */
@@ -24,14 +19,16 @@ export class MessageController {
   @Get(':roomId')
   @ApiResponse({ status: 200, description: 'Message Request Received' })
   @ApiResponse({ status: 400, description: 'Message Request Failed' })
-  async getProfile(@Param('roomId') roomId: string): Promise<IMessage[]> {
+  async get(@Param('roomId') roomId: string): Promise<IMessage[]> {
     const messages = await this.messageService.getMessagesByRoom(roomId);
-    if (!roomId) {
-      throw new BadRequestException(
-        'The messages could not be found.',
-      );
-    }
     return messages;
   }
 
+  @Get(':roomId/before/:date')
+  async getAll(
+    @Param('roomId') roomId: string,
+    @Param('date') date: string,
+  ): Promise<IMessage[]> {
+    return this.messageService.getMessagesBeforeDate(roomId, date);
+  }
 }

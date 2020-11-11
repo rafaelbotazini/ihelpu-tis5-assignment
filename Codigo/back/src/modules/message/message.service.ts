@@ -15,7 +15,23 @@ export class MessageService {
     return await this.messageModel.create({ roomId, fromId, text });
   }
 
+  async getMessagesBeforeDate(
+    roomId: string,
+    date: string,
+  ): Promise<IMessage[]> {
+    return await this.messageModel.find({
+      roomId,
+      createdAt: {
+        $lt: new Date(date),
+      },
+    });
+  }
+
   async getMessagesByRoom(roomId: string): Promise<IMessage[]> {
-    return await this.messageModel.find({'roomId': roomId}).populate('messages');
+    const messages = await this.messageModel.find({ roomId }).exec();
+    console.log('               HIT');
+    console.log('               HIT', messages);
+    console.log('roomId', roomId);
+    return messages;
   }
 }
