@@ -89,7 +89,7 @@ export class RoomService {
     const isMember = this.userIsMember(room, user);
 
     if (isMember) {
-      return;
+      return room;
     }
 
     user.groups.push(room);
@@ -97,6 +97,8 @@ export class RoomService {
 
     await user.save();
     await room.save();
+
+    return room;
   }
 
   async leave(roomId: string, user: IProfile): Promise<void> {
