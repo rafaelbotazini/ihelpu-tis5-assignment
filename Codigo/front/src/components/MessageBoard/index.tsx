@@ -40,11 +40,9 @@ const MessageBoard: React.FC<MessageBoardProps> = ({
             Carregar mensagens anteriores
           </LoadMessagesButton>
           {messages.map((message) => {
-            const user = members.find(
-              (u) => u.id === message.fromId,
-            ) as Profile;
-            const isCurrentUser = user.id === currentUser.id;
-            const isAdmin = user.id === admin.id;
+            const user = members.find((u) => u.id === message.fromId);
+            const isCurrentUser = !!user && user.id === currentUser.id;
+            const isAdmin = !!user && user.id === admin.id;
 
             return (
               <MessagePill

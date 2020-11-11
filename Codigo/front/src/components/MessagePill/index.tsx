@@ -15,7 +15,7 @@ import {
 
 type MessagePillProps = {
   message: ChatMessage;
-  user: Profile;
+  user?: Profile;
   isCurrentUser: boolean;
   isAdmin: boolean;
 };
@@ -28,17 +28,23 @@ const MessagePill: React.FC<MessagePillProps> = ({
 }) => {
   return (
     <MessageContainer position={isCurrentUser ? 'right' : 'left'}>
-      {!isCurrentUser && (
+      {user && !isCurrentUser && (
         <MessageAvatar avatar={`https://www.gravatar.com/avatar/${user.id}`} />
       )}
+
+      {!user && <MessageAvatar avatar="#" />}
+
       <MessageContentWrapper>
         <MessageHeader>
-          {!isCurrentUser && (
+          {user && !isCurrentUser && (
             <UserInfo>
               <strong>{user.username}</strong> - {user.university}{' '}
               {isAdmin && '(admin)'}
             </UserInfo>
           )}
+
+          {!user && <UserInfo>[removido]</UserInfo>}
+
           <MessageTime>
             {format(new Date(message.createdAt), 'PPpp', {
               locale: ptBR,

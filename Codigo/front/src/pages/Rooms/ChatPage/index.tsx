@@ -49,6 +49,8 @@ const ChatPage: React.FC = () => {
   useEffect(() => {
     // fetch room
     setLoading(true);
+    setMessages([]);
+
     api.rooms
       .get(id)
       .then(setRoom)
@@ -87,7 +89,10 @@ const ChatPage: React.FC = () => {
         <OptionLink onClick={handleGroupUnsubscribe}>Sair</OptionLink>
       </OptionsBar>
       <Container>
-        <h1>{room.name}</h1>
+        <div>
+          {room.name}
+          <small> ({room.members.length} usuários)</small>
+        </div>
 
         <MessageBoard
           messages={messages}
