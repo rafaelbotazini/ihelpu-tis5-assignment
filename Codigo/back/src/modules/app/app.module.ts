@@ -14,6 +14,8 @@ import { roles } from './app.roles';
 import { RoomModule } from 'modules/room/room.module';
 import { ChatModule } from 'modules/chat/chat.module';
 import { NotificationModule } from 'modules/notification/notification.module';
+import { MessageModule } from 'modules/message/message.module';
+import { MessagingModule } from 'modules/messaging/messaging.module';
 
 @Module({
   imports: [
@@ -73,6 +75,8 @@ import { NotificationModule } from 'modules/notification/notification.module';
     ProfileModule,
     RoomModule,
     NotificationModule,
+    MessageModule,
+    MessagingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

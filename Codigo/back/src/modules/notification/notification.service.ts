@@ -1,10 +1,12 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { Injectable } from '@nestjs/common';
 import { ROOM_UPDATES } from 'common/constants/exchanges';
 import { IProfile } from 'modules/profile/profile.model';
 import { IRoom } from 'modules/room/room.model';
 
+@Injectable()
 export class NotificationService {
-  constructor(private amqpConnection: AmqpConnection) {}
+  constructor(private readonly amqpConnection: AmqpConnection) {}
 
   /**
    * Notifies that one or more properties of a room has changed.
