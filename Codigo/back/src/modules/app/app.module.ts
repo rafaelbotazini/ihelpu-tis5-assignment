@@ -13,6 +13,7 @@ import { AccessControlModule } from 'nest-access-control';
 import { roles } from './app.roles';
 import { RoomModule } from 'modules/room/room.module';
 import { ChatModule } from 'modules/chat/chat.module';
+import { NotificationModule } from 'modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { ChatModule } from 'modules/chat/chat.module';
     ChatModule,
     ProfileModule,
     RoomModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
