@@ -7,6 +7,7 @@ import {
   Board,
   MessagesWrapper,
   LoadMessagesButton,
+  ControlMessage,
 } from './styles';
 
 type MessageBoardProps = {
@@ -33,6 +34,12 @@ const MessageBoard: React.FC<MessageBoardProps> = ({ user, chat }) => {
             Carregar mensagens anteriores
           </LoadMessagesButton>
           {messages.map((message) => {
+            if (message.fromId === 'SYSTEM') {
+              return (
+                <ControlMessage key={message.id}>{message.text}</ControlMessage>
+              );
+            }
+
             const sender = chat.members.find((u) => u.id === message.fromId);
             const isCurrentUser = !!sender && sender.id === user.id;
             const isAdmin = !!sender && sender.id === chat.admin.id;

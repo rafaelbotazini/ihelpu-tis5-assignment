@@ -1,5 +1,7 @@
-import React, { useReducer, createContext, useContext } from 'react';
+import React, { useReducer, createContext, useContext, useEffect } from 'react';
 import { Room } from '../../models/Room';
+import api from '../../services/api';
+import { useAuth } from '../AuthContext';
 import {
   roomAdded,
   reducer,
@@ -21,16 +23,26 @@ export const UserGroupsContext = createContext<UserGroupsContextData>({
 } as UserGroupsContextData);
 
 export const UserGroupsProvider: React.FC = ({ children }) => {
+  const auth = useAuth();
   const [state, dispatch] = useReducer(reducer, []);
+
+  const addRoom = (room: Room): void => dispatch(roomAdded(room));
+  const updateRoom = (room: Room): void => dispatch(roomUpdated(room));
+  const removeRoom = (id: string): void => dispatch(roomRemoved(id));
+  const setRooms = (rooms: Room[]): void => dispatch(roomsFetched(rooms));
+
+  useEffect(() => {
+    api.profile.getRooms().then(setRooms);
+  }, [auth]);
 
   return (
     <UserGroupsContext.Provider
       value={{
         rooms: state,
-        addRoom: (room) => dispatch(roomAdded(room)),
-        updateRoom: (room) => dispatch(roomUpdated(room)),
-        removeRoom: (id) => dispatch(roomRemoved(id)),
-        setRooms: (rooms) => dispatch(roomsFetched(rooms)),
+        addRoom,
+        updateRoom,
+        removeRoom,
+        setRooms,
       }}
     >
       {children}

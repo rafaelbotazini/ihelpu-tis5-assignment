@@ -3,6 +3,7 @@ import { ChatMessage } from '../../models/ChatMessage';
 import { Profile } from '../../models/Profile';
 import api from '../../services/api';
 import mq from '../../services/mq';
+import { StompMessage } from '../../services/mq/room-updates';
 import { useAuth } from '../AuthContext';
 
 export interface ChatState {
@@ -43,7 +44,7 @@ export const ChatProvider: React.FC = ({ children }) => {
     mq.chatMessages.sendTextMessage(state.id, user.id, text);
   };
 
-  const appendMessages = (items: ChatMessage[]): void => {
+  const appendMessage = (items: ChatMessage): void => {
     setState((current) => ({
       ...current,
       messages: current.messages.concat(items),
@@ -63,17 +64,73 @@ export const ChatProvider: React.FC = ({ children }) => {
       const messageSub = mq.chatMessages.subscribeToChatMessages(
         state.id,
         (payload, msg) => {
-          appendMessages([payload]);
+          appendMessage(payload);
           msg.ack();
+        },
+      );
+
+      const userJoinSub = mq.roomUpdates.subscribeToUserJoined(
+        state.id,
+        (member, message) => {
+          setState((current) => ({
+            ...current,
+            members: current.members.concat([
+              {
+                id: member.userId,
+                university: member.university,
+                avatar: member.avatar,
+                username: member.username,
+              } as Profile,
+            ]),
+          }));
+
+          appendMessage(
+            createControlMessage(
+              state.id,
+              `${member.username} entrou no grupo. Seja bem-vindo (a)!`,
+              message,
+            ),
+          );
+        },
+      );
+
+      const userLeaveSub = mq.roomUpdates.subscribeToUserLeft(
+        state.id,
+        (memberId, message) => {
+          setState((current) => {
+            const idx = current.members.findIndex((u) => u.id == memberId);
+            if (idx > -1) {
+              const member = current.members[idx];
+              appendMessage(
+                createControlMessage(
+                  state.id,
+                  `${member.username} saiu do grupo.`,
+                  message,
+                ),
+              );
+
+              const updated = current.members.concat([]);
+              updated.splice(idx, 1);
+
+              return {
+                ...current,
+                members: updated,
+              };
+            } else {
+              return current;
+            }
+          });
         },
       );
 
       return () => {
         messageSub.unsubscribe();
+        userJoinSub.unsubscribe();
+        userLeaveSub.unsubscribe();
       };
     }
     return () => void 0;
-  }, [state.id]);
+  }, [state.id, state.members]);
 
   return (
     <ChatContext.Provider
@@ -115,4 +172,18 @@ export function useChat(roomId: string): ChatContextData {
     throw new Error('useChat must be used within a ChatProvider');
   }
   return context;
+}
+
+function createControlMessage(
+  roomId: string,
+  text: string,
+  message: StompMessage,
+): ChatMessage {
+  return {
+    id: message.headers['message-id'],
+    roomId: roomId,
+    createdAt: new Date().toISOString(),
+    fromId: 'SYSTEM',
+    text: text,
+  };
 }

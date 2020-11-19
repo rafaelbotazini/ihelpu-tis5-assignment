@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { FaPlus, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
 import Navbar from '../Navbar';
@@ -6,19 +6,10 @@ import BottomLink from '../BottomLink';
 import SideBarMenu from '../SideBarMenu';
 import { ConnectionStatusContext } from '../../contexts/ConnectionStatusContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { useGroups } from '../../contexts/UserGroupsContext';
-import api from '../../services/api';
 
 const Layout: React.FC = ({ children }) => {
   const auth = useAuth();
-  const userGroups = useGroups();
   const { connected } = useContext(ConnectionStatusContext);
-
-  useEffect(() => {
-    if (auth.user) {
-      api.profile.getRooms().then(userGroups.setRooms);
-    }
-  }, [auth.user, userGroups.setRooms]);
 
   return (
     <Wrapper>
