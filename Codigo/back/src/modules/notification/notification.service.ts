@@ -2,7 +2,8 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
 import { ROOM_UPDATES } from 'common/constants/exchanges';
 import { IProfile } from 'modules/profile/profile.model';
-import { IRoom } from 'modules/room/room.model';
+import { EditRoomPayload } from 'modules/room/payload/EditRoomPayload';
+import { UserJoinedNotificationPayload } from './payload/user-joined.payload';
 
 @Injectable()
 export class NotificationService {
@@ -14,8 +15,8 @@ export class NotificationService {
    * Topic: updated.[roomId]
    * @param room the changed room (will be sent as the notification message)
    */
-  public notifyRoomChanged(room: IRoom): void {
-    this.amqpConnection.publish(ROOM_UPDATES, 'updated.' + room.id, room);
+  public notifyRoomChanged(roomId: string, update: EditRoomPayload): void {
+    this.amqpConnection.publish(ROOM_UPDATES, 'updated.' + roomId, update);
   }
 
   /**
@@ -50,8 +51,11 @@ export class NotificationService {
    * @param roomId the id of the room to be notified
    * @param user the user that has joined the group (will be sent as the notification message)
    */
-  public notifyUserJoined(roomId: string, user: IProfile): void {
-    this.amqpConnection.publish(ROOM_UPDATES, 'user_joined.' + roomId, user);
+  public notifyUserJoined(
+    roomId: string,
+    payload: UserJoinedNotificationPayload,
+  ): void {
+    this.amqpConnection.publish(ROOM_UPDATES, 'user_joined.' + roomId, payload);
   }
 
   /**

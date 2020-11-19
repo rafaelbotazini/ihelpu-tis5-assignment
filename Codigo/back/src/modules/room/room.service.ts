@@ -54,8 +54,8 @@ export class RoomService {
   }
 
   async editRoom(id: string, payload: EditRoomPayload): Promise<void> {
-    const update = await this.roomModel.findByIdAndUpdate(id, payload);
-    this.notificationService.notifyRoomChanged(update);
+    await this.roomModel.findByIdAndUpdate(id, payload);
+    this.notificationService.notifyRoomChanged(id, payload);
   }
 
   async getRoomsByName(name: string): Promise<IRoom[]> {
@@ -101,7 +101,13 @@ export class RoomService {
     await user.save();
     await room.save();
 
-    this.notificationService.notifyUserJoined(room.id, user);
+    this.notificationService.notifyUserJoined(room.id, {
+      roomId,
+      userId: user.id,
+      username: user.username,
+      avatar: user.avatar,
+      university: user.university,
+    });
 
     return room;
   }

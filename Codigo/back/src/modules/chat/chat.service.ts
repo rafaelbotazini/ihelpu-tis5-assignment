@@ -3,7 +3,9 @@ import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { RmqMessage } from 'common/interfaces/RmqMessage';
 import { TextMessagePayload } from './payload/text-message.payload';
 import { MessageService } from 'modules/message/message.service';
-import { CHAT_MESSAGES } from 'common/constants/exchanges';
+import { CHAT_MESSAGES, ROOM_UPDATES } from 'common/constants/exchanges';
+import { IProfile } from 'modules/profile/profile.model';
+import { IRoom } from 'modules/room/room.model';
 
 @Injectable()
 export class ChatService {
@@ -65,5 +67,18 @@ export class ChatService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  @RabbitSubscribe({
+    exchange: ROOM_UPDATES,
+    routingKey: '#',
+    queue: 'server_room_control',
+  })
+  public async handleRoomUpdates(
+    payload: string | IProfile | IRoom,
+    rmqMessage: RmqMessage,
+  ): Promise<void> {
+    const { routingKey } = rmqMessage.fields;
+    console.log([ROOM_UPDATES, routingKey].join('::'), payload);
   }
 }
