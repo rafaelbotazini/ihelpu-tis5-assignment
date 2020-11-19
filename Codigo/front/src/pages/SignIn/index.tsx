@@ -3,15 +3,13 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { Credentials } from '../../models/Credentials';
-import { signIn } from '../../services/api/auth';
-import { login } from '../../services/auth';
 import logoImg from '../../assets/users.svg';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Content } from './styles';
-import api from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
 
 type LocationState = {
   from: {
@@ -20,6 +18,7 @@ type LocationState = {
 };
 
 const SignIn: React.FC = () => {
+  const auth = useAuth();
   const history = useHistory<{ pathname: string }>();
   const location = useLocation<LocationState>();
 
@@ -36,11 +35,8 @@ const SignIn: React.FC = () => {
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    signIn(credentials)
-      .then((res) => {
-        login(res.data.token);
-      })
-      .then(api.profile.getCurrent)
+    auth
+      .signIn(credentials)
       .then(() => {
         const { from } = location.state || { from: { pathname: '/' } };
         history.push(from);

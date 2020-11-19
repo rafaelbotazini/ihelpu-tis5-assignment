@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import MessageBoard from '../../../components/MessageBoard';
-import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
 import { ChatMessage } from '../../../models/ChatMessage';
 import { Profile } from '../../../models/Profile';
@@ -16,7 +16,7 @@ import { Wrapper, Container, OptionsBar, OptionLink } from './styles';
 const ChatPage: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
-  const { user } = useContext(CurrentUserContext);
+  const { user } = useAuth();
   const { removeRoom } = useContext(UserGroupsContext);
 
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,13 @@ const ChatPage: React.FC = () => {
   };
 
   const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter' && user && textMessage) {
+    if (e.key === 'Enter') {
+      sendTextMessage();
+    }
+  };
+
+  const sendTextMessage = (): void => {
+    if (textMessage) {
       mq.chatMessages.sendTextMessage(id, user.id, textMessage);
       setTextMessage('');
     }
@@ -113,7 +119,10 @@ const ChatPage: React.FC = () => {
               placeholder="Digite sua mensagem"
             />
           </div>
-          <Button style={{ width: 'auto', margin: 0 }}>
+          <Button
+            style={{ width: 'auto', margin: 0 }}
+            onClick={sendTextMessage}
+          >
             <FaPaperPlane />
           </Button>
         </div>

@@ -11,10 +11,6 @@ import Rooms from './pages/Rooms';
 import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 
-import {
-  CurrentUserContext,
-  useCurrentUser,
-} from './contexts/CurrentUserContext';
 import { UserGroupsContextProvider } from './contexts/UserGroupsContext';
 
 import './services/wsRequest';
@@ -22,15 +18,15 @@ import {
   ConnectionStatusContext,
   useConnectionStatus,
 } from './contexts/ConnectionStatusContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 const App: React.FC = () => {
-  const currentUser = useCurrentUser();
   const connectionStatus = useConnectionStatus();
 
   return (
     <React.Fragment>
       <ConnectionStatusContext.Provider value={connectionStatus}>
-        <CurrentUserContext.Provider value={currentUser}>
+        <AuthProvider>
           <UserGroupsContextProvider>
             <BrowserRouter>
               <Switch>
@@ -66,7 +62,7 @@ const App: React.FC = () => {
               </Switch>
             </BrowserRouter>
           </UserGroupsContextProvider>
-        </CurrentUserContext.Provider>
+        </AuthProvider>
       </ConnectionStatusContext.Provider>
       <GlobalStyle />
     </React.Fragment>

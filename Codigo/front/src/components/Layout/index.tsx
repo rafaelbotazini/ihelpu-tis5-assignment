@@ -4,34 +4,21 @@ import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
 import Navbar from '../Navbar';
 import BottomLink from '../BottomLink';
 import SideBarMenu from '../SideBarMenu';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import api from '../../services/api';
-import { logout } from '../../services/auth';
 import { UserGroupsContext } from '../../contexts/UserGroupsContext';
 import { Room } from '../../models/Room';
 import { ConnectionStatusContext } from '../../contexts/ConnectionStatusContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Layout: React.FC = ({ children }) => {
-  const currentUser = useContext(CurrentUserContext);
+  const auth = useAuth();
   const userGroups = useContext(UserGroupsContext);
   const { connected } = useContext(ConnectionStatusContext);
 
   useEffect(() => {
-    if (!currentUser.user) {
-      api.profile
-        .getCurrent()
-        .then((userData) => {
-          currentUser.setUser(userData);
-          userGroups.setRooms(userData.groups as Room[]);
-        })
-        .catch(console.log);
+    if (auth.user) {
+      userGroups.setRooms(auth.user.groups as Room[]);
     }
-  }, [currentUser, userGroups]);
-
-  const handleLogout = (): void => {
-    currentUser.setUser(undefined);
-    logout();
-  };
+  }, [auth, userGroups]);
 
   return (
     <Wrapper>
@@ -54,7 +41,7 @@ const Layout: React.FC = ({ children }) => {
               to="/signin"
               name="Sair"
               icon={FaSignOutAlt}
-              onClick={handleLogout}
+              onClick={auth.signOut}
             />
           </BottomMenu>
         </Sider>
