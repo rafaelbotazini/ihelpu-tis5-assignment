@@ -2,8 +2,8 @@ import { Profile } from './Profile';
 
 export interface Room {
   id: string;
-  admin?: Profile;
+  admin: Profile;
   name: string;
   avatar: string;
-  members: Profile[] | string[];
+  members: Profile[];
 }

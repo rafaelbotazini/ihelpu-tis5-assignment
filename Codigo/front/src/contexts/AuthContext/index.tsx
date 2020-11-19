@@ -37,10 +37,6 @@ const AuthProvider: React.FC = ({ children }) => {
     loadStorageData();
   }, []);
 
-  useEffect(() => {
-    console.log('auth data', data);
-  }, [data]);
-
   const signIn = async (credentials: Credentials): Promise<void> => {
     try {
       const { token } = await api.auth

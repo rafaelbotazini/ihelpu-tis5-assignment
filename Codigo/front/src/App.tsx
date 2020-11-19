@@ -19,6 +19,7 @@ import {
   useConnectionStatus,
 } from './contexts/ConnectionStatusContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { ChatProvider } from './contexts/ChatContext';
 
 const App: React.FC = () => {
   const connectionStatus = useConnectionStatus();
@@ -43,20 +44,22 @@ const App: React.FC = () => {
                   <SignUp />
                 </Route>
                 <PrivateRoute path="/app">
-                  <Layout>
-                    <Switch>
-                      <Route exact path="/app">
-                        <Redirect to="/app/rooms" />
-                      </Route>
-                      <Route path="/app/rooms">
-                        <Rooms />
-                      </Route>
-                      <Route path="/app/profile">
-                        <Profile />
-                      </Route>
-                      <Route path="/app/*">404 Not found</Route>
-                    </Switch>
-                  </Layout>
+                  <ChatProvider>
+                    <Layout>
+                      <Switch>
+                        <Route exact path="/app">
+                          <Redirect to="/app/rooms" />
+                        </Route>
+                        <Route path="/app/rooms">
+                          <Rooms />
+                        </Route>
+                        <Route path="/app/profile">
+                          <Profile />
+                        </Route>
+                        <Route path="/app/*">404 Not found</Route>
+                      </Switch>
+                    </Layout>
+                  </ChatProvider>
                 </PrivateRoute>
                 <Route path="*">404 Not found</Route>
               </Switch>
