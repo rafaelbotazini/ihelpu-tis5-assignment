@@ -11,7 +11,7 @@ import Rooms from './pages/Rooms';
 import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 
-import { UserGroupsContextProvider } from './contexts/UserGroupsContext';
+import { UserGroupsProvider } from './contexts/UserGroupsContext';
 
 import './services/wsRequest';
 import {
@@ -28,22 +28,22 @@ const App: React.FC = () => {
     <React.Fragment>
       <ConnectionStatusContext.Provider value={connectionStatus}>
         <AuthProvider>
-          <UserGroupsContextProvider>
-            <BrowserRouter>
-              <Switch>
-                <Route exact path="/">
-                  <Redirect to="/app" />
-                </Route>
-                <Route exact path="/signin">
-                  <SignIn />
-                </Route>
-                <Route exact path="/forgotpassword">
-                  <ForgotPassword />
-                </Route>
-                <Route exact path="/signup">
-                  <SignUp />
-                </Route>
-                <PrivateRoute path="/app">
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/">
+                <Redirect to="/app" />
+              </Route>
+              <Route exact path="/signin">
+                <SignIn />
+              </Route>
+              <Route exact path="/forgotpassword">
+                <ForgotPassword />
+              </Route>
+              <Route exact path="/signup">
+                <SignUp />
+              </Route>
+              <PrivateRoute path="/app">
+                <UserGroupsProvider>
                   <ChatProvider>
                     <Layout>
                       <Switch>
@@ -60,11 +60,11 @@ const App: React.FC = () => {
                       </Switch>
                     </Layout>
                   </ChatProvider>
-                </PrivateRoute>
-                <Route path="*">404 Not found</Route>
-              </Switch>
-            </BrowserRouter>
-          </UserGroupsContextProvider>
+                </UserGroupsProvider>
+              </PrivateRoute>
+              <Route path="*">404 Not found</Route>
+            </Switch>
+          </BrowserRouter>
         </AuthProvider>
       </ConnectionStatusContext.Provider>
       <GlobalStyle />

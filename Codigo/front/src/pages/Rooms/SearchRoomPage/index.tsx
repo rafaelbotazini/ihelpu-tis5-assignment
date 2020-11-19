@@ -1,18 +1,11 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../../../components/Button';
 import CardList from '../../../components/CardList';
 import RoomCard from '../../../components/RoomCard';
-import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
+import { useGroups } from '../../../contexts/UserGroupsContext';
 import { Room } from '../../../models/Room';
 import api from '../../../services/api';
-import { searchRooms } from '../../../services/api/rooms';
 import {
   Container,
   ResultsContainer,
@@ -24,7 +17,7 @@ import {
 
 const SearchRoomPage: React.FC = () => {
   const history = useHistory();
-  const { rooms, addRoom } = useContext(UserGroupsContext);
+  const { rooms, addRoom } = useGroups();
   const [results, setResults] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 

@@ -1,4 +1,4 @@
-import React, { useReducer, createContext } from 'react';
+import React, { useReducer, createContext, useContext } from 'react';
 import { Room } from '../../models/Room';
 import {
   roomAdded,
@@ -8,7 +8,7 @@ import {
   roomUpdated,
 } from './reducer';
 
-export type UserGroups = {
+export type UserGroupsContextData = {
   rooms: Room[];
   addRoom: (room: Room) => void;
   removeRoom: (id: string) => void;
@@ -16,23 +16,11 @@ export type UserGroups = {
   setRooms: (id: Room[]) => void;
 };
 
-export const UserGroupsContext = createContext<UserGroups>({
-  rooms: [],
-  addRoom: () => {
-    return;
-  },
-  updateRoom: () => {
-    return;
-  },
-  removeRoom: () => {
-    return;
-  },
-  setRooms: () => {
-    return;
-  },
-});
+export const UserGroupsContext = createContext<UserGroupsContextData>({
+  rooms: [] as Room[],
+} as UserGroupsContextData);
 
-export const UserGroupsContextProvider: React.FC = ({ children }) => {
+export const UserGroupsProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, []);
 
   return (
@@ -49,3 +37,13 @@ export const UserGroupsContextProvider: React.FC = ({ children }) => {
     </UserGroupsContext.Provider>
   );
 };
+
+export function useGroups(): UserGroupsContextData {
+  const context = useContext(UserGroupsContext);
+
+  if (!context) {
+    throw new Error('useChat must be used within a ChatProvider');
+  }
+
+  return context;
+}

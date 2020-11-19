@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../../components/Button';
@@ -6,7 +6,7 @@ import Input from '../../../components/Input';
 import MessageBoard from '../../../components/MessageBoard';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useChat } from '../../../contexts/ChatContext';
-import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
+import { useGroups } from '../../../contexts/UserGroupsContext';
 import api from '../../../services/api';
 import { Wrapper, Container, OptionsBar, OptionLink } from './styles';
 
@@ -15,7 +15,7 @@ const ChatPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const chat = useChat(id);
-  const { removeRoom } = useContext(UserGroupsContext);
+  const { removeRoom } = useGroups();
   const [textMessage, setTextMessage] = useState('');
 
   const handleGroupUnsubscribe = (): void => {

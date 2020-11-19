@@ -4,21 +4,21 @@ import { Sider, Wrapper, ContentWrapper, Content, BottomMenu } from './styles';
 import Navbar from '../Navbar';
 import BottomLink from '../BottomLink';
 import SideBarMenu from '../SideBarMenu';
-import { UserGroupsContext } from '../../contexts/UserGroupsContext';
-import { Room } from '../../models/Room';
 import { ConnectionStatusContext } from '../../contexts/ConnectionStatusContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useGroups } from '../../contexts/UserGroupsContext';
+import api from '../../services/api';
 
 const Layout: React.FC = ({ children }) => {
   const auth = useAuth();
-  const userGroups = useContext(UserGroupsContext);
+  const userGroups = useGroups();
   const { connected } = useContext(ConnectionStatusContext);
 
   useEffect(() => {
     if (auth.user) {
-      userGroups.setRooms(auth.user.groups as Room[]);
+      api.profile.getRooms().then(userGroups.setRooms);
     }
-  }, [auth, userGroups]);
+  }, [auth.user, userGroups.setRooms]);
 
   return (
     <Wrapper>
