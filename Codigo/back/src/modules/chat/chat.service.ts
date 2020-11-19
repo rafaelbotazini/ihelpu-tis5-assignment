@@ -3,6 +3,7 @@ import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { RmqMessage } from 'common/interfaces/RmqMessage';
 import { TextMessagePayload } from './payload/text-message.payload';
 import { MessageService } from 'modules/message/message.service';
+import { CHAT_MESSAGES } from 'common/constants/exchanges';
 
 @Injectable()
 export class ChatService {
@@ -22,7 +23,7 @@ export class ChatService {
     message: string,
     userId: string,
   ): void {
-    this.amqpConnection.publish('chat_messages', 'send_text.' + roomId, {
+    this.amqpConnection.publish(CHAT_MESSAGES, 'send_text.' + roomId, {
       userId,
       message,
     });
@@ -37,7 +38,7 @@ export class ChatService {
    * @param message RabbitMQ message info
    */
   @RabbitSubscribe({
-    exchange: 'chat_messages',
+    exchange: CHAT_MESSAGES,
     routingKey: 'send_text.*',
     queue: 'server_messages',
   })
@@ -48,7 +49,6 @@ export class ChatService {
     const { routingKey } = rmqMessage.fields;
     const roomId = routingKey.substr(routingKey.indexOf('.') + 1);
     try {
-      console.log(roomId, payload);
       // persist new message
       const message = await this.messageService.addTextMessage(
         roomId,
@@ -58,7 +58,7 @@ export class ChatService {
 
       // publish message to subscribed clients
       this.amqpConnection.publish(
-        'chat_messages',
+        CHAT_MESSAGES,
         'message.' + roomId,
         message.toJSON(),
       );

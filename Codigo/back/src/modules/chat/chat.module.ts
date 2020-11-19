@@ -5,6 +5,7 @@ import { ChatController } from './chat.controller';
 import { ConfigModule } from 'modules/config/config.module';
 import { ConfigService } from 'modules/config/config.service';
 import { MessageModule } from 'modules/message/message.module';
+import { CHAT_MESSAGES } from 'common/constants/exchanges';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { MessageModule } from 'modules/message/message.module';
       useFactory: (configService: ConfigService) => ({
         exchanges: [
           {
-            name: 'chat_messages',
+            name: CHAT_MESSAGES,
             type: 'topic',
           },
         ],
