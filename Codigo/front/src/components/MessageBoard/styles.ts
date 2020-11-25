@@ -12,7 +12,8 @@ export const Board = styled.div`
   max-height: calc(100vh - 242px);
   overflow-y: scroll;
   overflow-x: hidden;
-  margin-right: -15px;
+  padding-right: 20px;
+  margin-right: -20px;
   margin-bottom: 12px;
 `;
 
