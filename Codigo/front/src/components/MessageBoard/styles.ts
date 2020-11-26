@@ -31,3 +31,9 @@ export const LoadMessagesButton = styled.div`
     color: ${darken(0.15, colors.secondary)};
   }
 `;
+
+export const ControlMessage = styled.div`
+  color: ${colors.textMuted};
+  padding: 8px;
+  text-align: center;
+`;

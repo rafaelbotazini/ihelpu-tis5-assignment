@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ChatMessage } from '../../models/ChatMessage';
+import { ChatContextData } from '../../contexts/ChatContext';
 import { Profile } from '../../models/Profile';
 import MessagePill from '../MessagePill';
 import {
@@ -7,23 +7,17 @@ import {
   Board,
   MessagesWrapper,
   LoadMessagesButton,
+  ControlMessage,
 } from './styles';
 
 type MessageBoardProps = {
-  messages: ChatMessage[];
-  currentUser: Profile;
-  admin: Profile;
-  members: Profile[];
-  onLoadMessagesClick: () => void;
+  user: Profile;
+  chat: ChatContextData;
 };
 
-const MessageBoard: React.FC<MessageBoardProps> = ({
-  messages,
-  members,
-  currentUser,
-  admin,
-  onLoadMessagesClick,
-}) => {
+const MessageBoard: React.FC<MessageBoardProps> = ({ user, chat }) => {
+  const { messages } = chat;
+
   const bottom = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,19 +30,25 @@ const MessageBoard: React.FC<MessageBoardProps> = ({
     <BoardWrapper>
       <Board>
         <MessagesWrapper>
-          <LoadMessagesButton onClick={onLoadMessagesClick}>
+          <LoadMessagesButton onClick={chat.loadOlderMessages}>
             Carregar mensagens anteriores
           </LoadMessagesButton>
           {messages.map((message) => {
-            const user = members.find((u) => u.id === message.fromId);
-            const isCurrentUser = !!user && user.id === currentUser.id;
-            const isAdmin = !!user && user.id === admin.id;
+            if (message.fromId === 'SYSTEM') {
+              return (
+                <ControlMessage key={message.id}>{message.text}</ControlMessage>
+              );
+            }
+
+            const sender = chat.members.find((u) => u.id === message.fromId);
+            const isCurrentUser = !!sender && sender.id === user.id;
+            const isAdmin = !!sender && sender.id === chat.admin.id;
 
             return (
               <MessagePill
                 key={message.id}
                 message={message}
-                user={user}
+                user={sender}
                 isCurrentUser={isCurrentUser}
                 isAdmin={isAdmin}
               />

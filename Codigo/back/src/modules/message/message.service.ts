@@ -28,10 +28,6 @@ export class MessageService {
   }
 
   async getMessagesByRoom(roomId: string): Promise<IMessage[]> {
-    const messages = await this.messageModel.find({ roomId }).exec();
-    console.log('               HIT');
-    console.log('               HIT', messages);
-    console.log('roomId', roomId);
-    return messages;
+    return await this.messageModel.find({ roomId });
   }
 }

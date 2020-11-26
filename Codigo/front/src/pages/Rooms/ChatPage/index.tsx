@@ -1,86 +1,61 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import MessageBoard from '../../../components/MessageBoard';
-import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
-import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
-import { ChatMessage } from '../../../models/ChatMessage';
-import { Profile } from '../../../models/Profile';
-import { Room } from '../../../models/Room';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useChat } from '../../../contexts/ChatContext';
+import { useGroups } from '../../../contexts/UserGroupsContext';
 import api from '../../../services/api';
-import mq from '../../../services/mq';
 import { Wrapper, Container, OptionsBar, OptionLink } from './styles';
 
 const ChatPage: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
-  const { user } = useContext(CurrentUserContext);
-  const { removeRoom } = useContext(UserGroupsContext);
-
-  const [loading, setLoading] = useState(true);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const { user } = useAuth();
+  const chat = useChat(id);
+  const { removeRoom } = useGroups();
   const [textMessage, setTextMessage] = useState('');
-  const [room, setRoom] = useState<Room>({} as Room);
 
   const handleGroupUnsubscribe = (): void => {
-    api.rooms.leave(id).then(() => {
-      removeRoom(id);
-      history.push('/');
-    });
+    const confirmExit = window.confirm(
+      'Você não fará mais parte deste grupo. Tem certeza?',
+    );
+
+    if (confirmExit) {
+      api.rooms.leave(id).then(() => {
+        removeRoom(id);
+        history.push('/');
+      });
+    }
   };
 
   const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter' && user && textMessage) {
-      mq.chatMessages.sendTextMessage(id, user.id, textMessage);
+    if (e.key === 'Enter') {
+      submitMessage();
+    }
+  };
+
+  const submitMessage = (): void => {
+    if (textMessage) {
+      chat.sendTextMessage(textMessage);
       setTextMessage('');
     }
   };
 
-  const loadOlderMessages = (): void => {
-    const request: Promise<ChatMessage[]> = messages.length
-      ? api.message.getMessagesBefore(id, messages[0].createdAt)
-      : api.message.getMessagesByRoom(id);
-
-    request.then((items) => setMessages((m) => m.concat(items)));
-  };
-
-  useEffect(() => {
-    // fetch room
-    setLoading(true);
-    setMessages([]);
-
-    api.rooms
-      .get(id)
-      .then(setRoom)
-      .finally(() => setLoading(false));
-
-    // receive messages
-    const { unsubscribe } = mq.chatMessages.subscribeToChatMessages(
-      id,
-      (msg) => {
-        setMessages((msgs) => msgs.concat([JSON.parse(msg.body)]));
-        msg.ack();
-      },
-    );
-
-    // TODO: get older messages
-    return unsubscribe;
-  }, [id]);
-
-  if (loading) {
+  if (chat.loading) {
     return <Container>Carregando os dados da sala...</Container>;
   }
 
-  if (!room || !room.id) {
+  if (!chat || !chat.id) {
     return <Container>Sala não encontrada</Container>;
   }
 
   return (
     <Wrapper>
       <OptionsBar>
-        {user?.id === room.admin?.id && (
+        {user.id === chat.admin.id && (
           <OptionLink onClick={() => history.push('edit/' + id)}>
             Editar
           </OptionLink>
@@ -90,17 +65,11 @@ const ChatPage: React.FC = () => {
       </OptionsBar>
       <Container>
         <div>
-          {room.name}
-          <small> ({room.members.length} usuários)</small>
+          {chat.name}
+          <small> ({chat.members.length} usuários)</small>
         </div>
 
-        <MessageBoard
-          messages={messages}
-          currentUser={user as Profile}
-          members={room.members as Profile[]}
-          admin={room.admin as Profile}
-          onLoadMessagesClick={loadOlderMessages}
-        />
+        <MessageBoard chat={chat} user={user} />
 
         <div style={{ display: 'flex' }}>
           <div style={{ marginRight: 8, width: '100%' }}>
@@ -113,7 +82,7 @@ const ChatPage: React.FC = () => {
               placeholder="Digite sua mensagem"
             />
           </div>
-          <Button style={{ width: 'auto', margin: 0 }}>
+          <Button style={{ width: 'auto', margin: 0 }} onClick={submitMessage}>
             <FaPaperPlane />
           </Button>
         </div>
