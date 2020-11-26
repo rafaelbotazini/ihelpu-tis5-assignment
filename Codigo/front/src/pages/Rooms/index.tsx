@@ -9,7 +9,7 @@ const Rooms: React.FC = () => {
   return (
     <Switch>
       <Route exact path="/app/rooms">
-        <Redirect to="/app/rooms/create" />
+        <Redirect to="/app/rooms/search" />
       </Route>
       <Route exact path="/app/rooms/create">
         <CreateRoomPage />
