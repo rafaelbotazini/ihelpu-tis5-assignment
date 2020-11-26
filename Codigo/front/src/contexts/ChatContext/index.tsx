@@ -98,7 +98,7 @@ export const ChatProvider: React.FC = ({ children }) => {
         state.id,
         (memberId, message) => {
           setState((current) => {
-            const idx = current.members.findIndex((u) => u.id == memberId);
+            const idx = current.members.findIndex((u) => u.id === memberId);
             if (idx > -1) {
               const member = current.members[idx];
               appendMessage(
