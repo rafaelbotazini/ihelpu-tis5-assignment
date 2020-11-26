@@ -1,16 +1,15 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import ChatPage from './ChatPage';
 import CreateRoomPage from './CreateRoomPage';
 import EditRoomPage from './EditRoomPage';
-import RoomsListingPage from './RoomsListingPage';
 import SearchRoomPage from './SearchRoomPage';
 
 const Rooms: React.FC = () => {
   return (
     <Switch>
       <Route exact path="/app/rooms">
-        <RoomsListingPage />
+        <Redirect to="/app/rooms/create" />
       </Route>
       <Route exact path="/app/rooms/create">
         <CreateRoomPage />
