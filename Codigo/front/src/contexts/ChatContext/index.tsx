@@ -123,10 +123,37 @@ export const ChatProvider: React.FC = ({ children }) => {
         },
       );
 
+      const newAdminSub = mq.roomUpdates.subscribeToAdminChanged(
+        state.id,
+        (memberId, message) => {
+          setState((current) => {
+            const idx = current.members.findIndex((u) => u.id == memberId);
+            if (idx > -1) {
+              const member = current.members[idx];
+              appendMessage(
+                createControlMessage(
+                  state.id,
+                  `${member.username} é o novo administrador do grupo.`,
+                  message,
+                ),
+              );
+
+              return {
+                ...current,
+                admin: member,
+              };
+            } else {
+              return current;
+            }
+          });
+        },
+      );
+
       return () => {
         messageSub.unsubscribe();
         userJoinSub.unsubscribe();
         userLeaveSub.unsubscribe();
+        newAdminSub.unsubscribe();
       };
     }
     return () => void 0;

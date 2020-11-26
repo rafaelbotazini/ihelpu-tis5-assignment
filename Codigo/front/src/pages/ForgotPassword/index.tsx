@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { FiMail, FiLogIn } from 'react-icons/fi';
 
@@ -12,10 +12,6 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 const ForgotPassword: React.FC = () => {
-  const handleSubmit = useCallback(() => {
-    console.log('insert logic here');
-  }, []);
-
   return (
     <Container>
       <Content>
