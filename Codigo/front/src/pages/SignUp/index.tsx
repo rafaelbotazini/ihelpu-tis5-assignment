@@ -3,8 +3,7 @@ import { FiArrowLeft, FiMail, FiUser, FiLock } from 'react-icons/fi';
 import { FaUniversity, FaUserCircle } from 'react-icons/fa';
 
 import { SignUpForm } from '../../models/forms/SignUpForm';
-import { login } from '../../services/auth';
-import { signUp } from '../../services/api/auth';
+import api from '../../services/api';
 
 import logoImg from '../../assets/users.svg';
 
@@ -13,8 +12,10 @@ import Button from '../../components/Button';
 
 import { Container, Content } from './styles';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const SignUp: React.FC = () => {
+  const auth = useAuth();
   const history = useHistory<{ pathname: string }>();
   const location = useLocation<{ from: { pathname: string } }>();
 
@@ -34,11 +35,10 @@ const SignUp: React.FC = () => {
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    console.log('credentials', user);
-
-    signUp(user)
-      .then((res) => {
-        login(res.data.token);
+    api.auth
+      .signUp(user)
+      .then(() => auth.signIn(user))
+      .then(() => {
         const { from } = location.state || { from: { pathname: '/' } };
         history.push(from);
       })

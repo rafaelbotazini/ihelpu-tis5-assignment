@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Brand, NavWrapper, Profile, Container } from './styles';
 import { Link } from 'react-router-dom';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 import logo from '../../assets/users.svg';
 import userLogo from '../../assets/Subtract.png';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Navbar: React.FC = ({ children }) => {
-  const { user } = useContext(CurrentUserContext);
+  const { user } = useAuth();
   const history = useHistory();
 
   return (

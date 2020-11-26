@@ -13,6 +13,7 @@ import { AppRoles } from '../app/app.roles';
 import { PatchProfilePayload } from './payload/patch.profile.payload';
 import { IGenericMessageBody } from 'common/interfaces/IGenericMessageBody';
 import { IRoom } from 'modules/room/room.model';
+import { NotificationService } from 'modules/notification/notification.service';
 
 /**
  * Profile Service
@@ -25,6 +26,7 @@ export class ProfileService {
    */
   constructor(
     @InjectModel('Profile') private readonly profileModel: Model<IProfile>,
+    private readonly notificationService: NotificationService,
   ) {}
 
   /**
@@ -136,6 +138,7 @@ export class ProfileService {
     await this.profileModel.findByIdAndUpdate(user.id, {
       $pullAll: { groups: [room] },
     });
+    this.notificationService.notifyUserLeft(room.id, user.id);
   }
 
   private hashPassword(password: string): string {

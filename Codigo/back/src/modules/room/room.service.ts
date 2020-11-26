@@ -6,6 +6,7 @@ import { CreateRoomPayload } from './payload/CreateRoomPayload';
 import { EditRoomPayload } from './payload/EditRoomPayload';
 import { ProfileService } from 'modules/profile/profile.service';
 import { IProfile } from 'modules/profile/profile.model';
+import { NotificationService } from 'modules/notification/notification.service';
 
 /**
  * Room Service
@@ -15,6 +16,7 @@ export class RoomService {
   constructor(
     @InjectModel('Room') private readonly roomModel: Model<IRoom>,
     private readonly profileService: ProfileService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   /**
@@ -53,6 +55,7 @@ export class RoomService {
 
   async editRoom(id: string, payload: EditRoomPayload): Promise<void> {
     await this.roomModel.findByIdAndUpdate(id, payload);
+    this.notificationService.notifyRoomChanged(id, payload);
   }
 
   async getRoomsByName(name: string): Promise<IRoom[]> {
@@ -98,6 +101,14 @@ export class RoomService {
     await user.save();
     await room.save();
 
+    this.notificationService.notifyUserJoined(room.id, {
+      roomId,
+      userId: user.id,
+      username: user.username,
+      avatar: user.avatar,
+      university: user.university,
+    });
+
     return room;
   }
 
@@ -115,19 +126,21 @@ export class RoomService {
     await this.profileService.leaveRoom(user, room);
 
     // remove user from room
-    if (this.userIsAdmin(room, user)) {
-      if (room.members.length >= 2) {
-        await this.roomModel.findByIdAndUpdate(room.id, {
-          $pullAll: { members: [user] },
-          admin: room.members[1],
-        });
-      } else {
-        await this.roomModel.findByIdAndRemove(roomId);
-      }
-    } else {
+    if (!this.userIsAdmin(room, user)) {
       await this.roomModel.findByIdAndUpdate(room.id, {
         $pullAll: { members: [user] },
       });
+    } else if (room.members.length >= 2) {
+      const newAdmin = room.members[1];
+
+      await this.roomModel.findByIdAndUpdate(room.id, {
+        $pullAll: { members: [user] },
+        admin: newAdmin,
+      });
+
+      this.notificationService.notifyRoomAdminChanged(room.id, newAdmin.id);
+    } else {
+      await this.roomModel.findByIdAndRemove(roomId);
     }
   }
 

@@ -89,6 +89,9 @@ export class RoomControler {
       throw new ForbiddenException();
     }
 
-    return await this.roomService.editRoom(id, payload);
+    return await this.roomService.editRoom(id, {
+      avatar: payload.avatar,
+      name: payload.name,
+    });
   }
 }

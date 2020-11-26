@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { FiEdit3, FiSave } from 'react-icons/fi';
 import { useHistory, useParams } from 'react-router-dom';
 import { Container } from '../../../components/Layout/styles';
@@ -12,7 +6,7 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import api from '../../../services/api';
 import { Room } from '../../../models/Room';
-import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
+import { useGroups } from '../../../contexts/UserGroupsContext';
 
 type PageParams = {
   id: string;
@@ -21,7 +15,7 @@ type PageParams = {
 const EditRoomPage: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<PageParams>();
-  const { updateRoom } = useContext(UserGroupsContext);
+  const { updateRoom } = useGroups();
   const [room, setRoom] = useState<Room>({} as Room);
   const [loading, setLoading] = useState(true);
 

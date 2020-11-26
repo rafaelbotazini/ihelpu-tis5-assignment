@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useGroups } from '../../contexts/UserGroupsContext';
 import { colors } from '../../styles/themes';
 import RoomAvatar from '../RoomAvatar';
 
@@ -11,10 +12,9 @@ import {
   FlexDiv,
   SideMenuMessage,
 } from './styles';
-import { UserGroupsContext } from '../../contexts/UserGroupsContext';
 
 const SideBarMenu: React.FC = () => {
-  const { rooms } = useContext(UserGroupsContext);
+  const { rooms } = useGroups();
 
   return (
     <SideMenu>

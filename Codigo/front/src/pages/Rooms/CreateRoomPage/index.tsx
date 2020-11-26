@@ -1,14 +1,14 @@
-import React, { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { FiEdit3, FiSave } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import { Container } from '../../../components/Layout/styles';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import api from '../../../services/api';
-import { UserGroupsContext } from '../../../contexts/UserGroupsContext';
+import { useGroups } from '../../../contexts/UserGroupsContext';
 
 const CreateRoomPage: React.FC = () => {
-  const { addRoom } = useContext(UserGroupsContext);
+  const { addRoom } = useGroups();
   const history = useHistory();
   const [name, setName] = useState('');
 

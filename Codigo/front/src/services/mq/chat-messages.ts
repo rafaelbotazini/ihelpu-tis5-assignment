@@ -1,4 +1,5 @@
 import { Message, Subscription } from 'stompjs';
+import { ChatMessage } from '../../models/ChatMessage';
 import client from '../wsRequest';
 
 export const sendTextMessage = (
@@ -18,11 +19,11 @@ export const sendTextMessage = (
 
 export const subscribeToChatMessages = (
   roomId: string,
-  callback: (msg: Message) => void,
+  callback: (payload: ChatMessage, msg: Message) => void,
 ): Subscription => {
   return client.subscribe(
     '/exchange/chat_messages/message.' + roomId,
-    callback,
+    (message) => callback(JSON.parse(message.body), message),
     { ack: 'client' },
   );
 };
